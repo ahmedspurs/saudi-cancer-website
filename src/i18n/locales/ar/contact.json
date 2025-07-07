@@ -1,0 +1,42 @@
+{
+    "hero": {
+        "title": "تواصل معنا",
+        "content": "نحن هنا للإجابة على جميع استفساراتكم. لا تترددوا في التواصل معنا عبر البريد الإلكتروني أو الهاتف."
+    },
+    "contact_information": {
+        "title": "معلومات الاتصال",
+        "chairman": {
+            "name": "الدكتور /مساعد محمد سعيد الزهراني          ",
+            "title": " رئيس قسم هندسة الميكانيكا والطاقة،        ",
+            "email": "mmsalZahrani@iau.edu.sa",
+            "phone": "+966 50 548 3901"
+        },
+        "department": {
+            "name": "قسم الهندسة الميكانيكية والطاقة",
+            "institution": "جامعة الإمام عبدالرحمن بن فيصل",
+            "location": "المملكة العربية السعودية",
+            "email": "ce.me@iau.edu.sa",
+            "office_phone": "+966 13 333 1823"
+        },
+        "event": {
+            "email": "ce.meed.event@iau.edu.sa"
+        }
+    },
+    "contact_form": {
+        "title": "اتصل بنا",
+        "fields": {
+            "name": {
+                "label": "الاسم",
+                "placeholder": "أدخل اسمك"
+            },
+            "email": {
+                "label": "البريد الإلكتروني",
+                "placeholder": "أدخل بريدك الإلكتروني"
+            },
+            "message": {
+                "label": "الرسالة",
+                "placeholder": "أدخل رسالتك"
+            }
+        }
+    }
+}

@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Farro:wght@300;400;500;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&display=swap");
+
+/* apply-rtl */
+/* apply-rtl */
+* {
+  font-family: "Cairo", sans-serif;
+  direction: rtl !important;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth !important;
+}
+
+
+
+button,
+a,
+router-link,
+img,
+RouterLink {
+  transition: all 0.3s ease-in-out 0.3s !important;
+}
+
+img:hover {
+  transform: scale(1.1) !important;
+}
+
+header .mobile-header a:hover,
+header .mobile-header span:hover {
+  color: #fff;
+}
+
+

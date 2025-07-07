@@ -1,0 +1,178 @@
+/* layouts */
+.container {
+  @apply mx-auto max-w-[92%] ps-4 pe-4 md:ps-8 md:pe-8;
+}
+
+@media (min-width: 1500px) {
+  .container {
+    @apply mx-auto !max-w-[1300px];
+  }
+}
+
+.section-divider-lg {
+  @apply mt-16;
+}
+
+.section-divider-sm {
+  @apply mt-8;
+}
+
+/* backgrounds */
+.bg-primary {
+  @apply !bg-[#C755D1];
+}
+.bg-secondary {
+  @apply !bg-[#866EAF];
+}
+.bg-tirnary {
+  @apply bg-[#01B6AD];
+}
+
+.bg-body {
+  @apply bg-[#ffffff];
+}
+/* typography */
+
+.text-primary {
+  @apply text-[#C755D1];
+}
+.text-secondary {
+  @apply !text-[#866EAF];
+}
+.text-tirnary {
+  @apply text-[#01B6AD];
+}
+
+.title {
+  @apply text-[16px] sm:text-[22px] md:text-[30px];
+}
+
+.hero-title {
+  @apply text-[30px] sm:text-[40px] md:text-[70px] font-bold;
+}
+
+.main-title {
+  @apply inline-block text-[#866EAF] text-[20px] sm:text-[30px] md:text-[40px] font-bold border-b-2 border-[#866EAF];
+}
+.section-title {
+  @apply inline-block text-[#866EAF] text-[20px] sm:text-[w0px] md:text-[30px] font-bold 
+}
+
+.main-title-size {
+  @apply  text-[30px] sm:text-[40px] md:text-[50px] ;
+}
+
+.main-title-size-sm {
+  @apply  text-[20px] sm:text-[20px] md:text-[30px] ;
+}
+.main-title-b{
+  @apply  text-[#01B6AD] text-[30px] sm:text-[40px] md:text-[50px] font-bold ;
+}
+
+.sub-title {
+  @apply text-[14px] sm:text-[16px] md:text-[20px] font-bold;
+}
+
+.title-light {
+  @apply text-[16px] sm:text-[22px] md:text-[30px] text-white;
+}
+
+.sub-title-light {
+  @apply text-[16px] sm:text-[22px] md:text-[30px] text-white;
+}
+
+.paragraph {
+  @apply text-[13px] sm:text-[16px] md:text-[18px];
+}
+
+.paragraph-lg {
+  @apply text-[18px] sm:text-[20px] md:text-[25px];
+}
+
+.paragraph-light {
+  @apply text-[13px] sm:text-[16px] md:text-[18px] text-white;
+}
+.paragraph-primary {
+  @apply text-[#01B6AD]  font-bold;
+}
+
+/* layouts */
+
+.grid-2 {
+  @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2;
+}
+.grid-3 {
+  @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3;
+}
+
+.grid-4 {
+  @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4;
+}
+
+.grid-5 {
+  @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5;
+}
+
+.flex-center {
+  @apply flex  justify-center items-center;
+}
+
+.flex-center-mobile {
+  @apply flex flex-col md:flex-row justify-center items-center;
+}
+
+.flex-col-center {
+  @apply flex flex-col justify-center items-center;
+}
+
+.flex-between {
+  @apply flex flex-col justify-between md:flex-row;
+}
+
+.flex-between-reverse {
+  @apply flex flex-col-reverse justify-between md:flex-row;
+}
+
+.flex-col-between {
+  @apply flex flex-col justify-between;
+}
+
+.footer-icons-flex {
+  @apply flex flex-col justify-start items-start md:items-center;
+}
+
+/* end layouts */
+
+/* buttons */
+
+.btn-primary {
+  @apply px-9 py-3 bg-[#C755D1] text-white rounded hover:bg-[#866EAF];
+}
+
+.btn-tirnary {
+  @apply px-6 py-2 bg-[#01B6AD] text-white font-bold rounded hover:bg-[#866EAF] hover:text-white;
+}
+
+.btn-secondary {
+  @apply px-6 py-2 bg-[#866EAF] text-white rounded-xl;
+}
+.btn-secondary-full {
+  @apply px-6 py-2 w-full bg-[#866EAF] text-white rounded-xl;
+}
+
+.btn-header {
+  @apply px-4 py-1 bg-[#fff] text-black text-sm rounded-full;
+}
+
+/* end buttons */
+
+/* image fit */
+html[lang="ar"] .object-fit-center-end {
+  @apply object-contain object-center md:object-left;
+}
+
+html[lang="en"] .object-fit-center-end {
+  @apply object-contain object-center md:object-right;
+}
+
+/* end image fit */

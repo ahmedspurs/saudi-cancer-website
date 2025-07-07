@@ -1,0 +1,44 @@
+{
+  "name": "lahn-site",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@chenfengyuan/vue-countdown": "^2.1.2",
+    "@primeuix/themes": "^1.1.1",
+    "@primevue/themes": "^4.2.2",
+    "aos-vue": "^0.0.5",
+    "axios": "^1.7.7",
+    "bcryptjs": "^3.0.2",
+    "feather-icons": "^4.29.2",
+    "lodash": "^4.17.21",
+    "passport-linkedin-oauth2": "^2.0.0",
+    "primeicons": "^7.0.0",
+    "primevue": "^4.3.5",
+    "sweetalert2": "^11.14.5",
+    "swiper": "^11.1.14",
+    "v-wow": "github:guisoares2011/vue-wow",
+    "vue": "^3.5.13",
+    "vue-feather": "^2.0.0",
+    "vue-i18n": "^10.0.4",
+    "vue-loading-overlay": "^6.0.6",
+    "vue-router": "^4.4.5",
+    "vue-tel-input": "^9.3.0",
+    "vue3-carousel": "^0.16.0",
+    "vue3-linkedin-login": "^0.1.8",
+    "vuex": "^4.1.0",
+    "wow.js": "^1.2.2"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.1.4",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.14",
+    "vite": "^5.4.10"
+  }
+}

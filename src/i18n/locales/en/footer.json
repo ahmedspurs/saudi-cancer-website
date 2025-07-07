@@ -1,0 +1,36 @@
+{
+  "quick_links": "Quick Links",
+  "comp_title": "Energy Symposium and Exhibition 2025",
+  "main_org": "Main Organizer",
+  "event_org": "Event Organizer",
+  "lahn": "Lahn Technology",
+  "contact_info": "Contact Information",
+  "phone": "Phone",
+  "email": "Email",
+  "chairman": {
+    "name": "Dr. Musaed Al-Zahrani",
+    "title": "Head of Mechanical and Energy Engineering Department",
+    "position": "Chairman of the Symposium and Exhibition:",
+    "phone": "+966 50 548 3901"
+  },
+  "department": {
+    "name": "Department of Mechanical and Energy Engineering",
+    "university": "Imam Abdulrahman Bin Faisal University",
+    "country": "Saudi Arabia",
+    "phone": "0505483901",
+    "phoneTitle": "Phone: ",
+    "telTitle": "Department Phone: ",
+    "tel": "0133331823"
+  },
+  "event_email": "co.meeda@rentofauretus.aq",
+  "navigation": {
+    "home": "Home",
+    "about": "About Us",
+    "event": "Event",
+    "mech_thon": "Mechathon",
+    "contact": "Contact Us",
+    "exhibited_inventions": "Exhibited Inventions",
+    "speakers": "Speakers"
+  },
+  "copyright": "Designed and Hosted by      "
+}

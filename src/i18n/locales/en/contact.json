@@ -1,0 +1,42 @@
+{
+    "hero": {
+        "title": "Contact Us",
+        "content": "We are here to answer all your inquiries. Feel free to contact us via email or phone."
+    },
+    "contact_information": {
+        "title": "Contact Information",
+        "chairman": {
+            "name": "Dr. Musaed Mohammed Saeed Al-Zahrani",
+            "title": "Head of the Department of Mechanical and Energy Engineering",
+            "email": "mmsalZahrani@iau.edu.sa",
+            "phone": "+966 50 548 3901"
+        },
+        "department": {
+            "name": "Department of Mechanical and Energy Engineering",
+            "institution": "Imam Abdulrahman Bin Faisal University",
+            "location": "Saudi Arabia",
+            "email": "ce.me@iau.edu.sa",
+            "office_phone": "+966 13 333 1823"
+        },
+        "event": {
+            "email": "ce.meed.event@iau.edu.sa"
+        }
+    },
+    "contact_form": {
+        "title": "Get in Touch",
+        "fields": {
+            "name": {
+                "label": "Name",
+                "placeholder": "Enter your name"
+            },
+            "email": {
+                "label": "Email",
+                "placeholder": "Enter your email"
+            },
+            "message": {
+                "label": "Message",
+                "placeholder": "Enter your message"
+            }
+        }
+    }
+}
