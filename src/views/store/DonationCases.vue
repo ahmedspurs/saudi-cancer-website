@@ -49,7 +49,7 @@
       <div
         v-for="project in projects"
         :key="project.id"
-        class="bg-secondary text-white rounded-lg p-4 shadow-md flex flex-col"
+        class="bg-secondary text-white rounded-lg p-4 shadow-md flex flex-col justify-between"
       >
         <!-- صورة المشروع -->
         <div
@@ -68,12 +68,30 @@
             alt="صورة الحساب"
             class="w-full h-full !object-cover !object-center"
           />
+          <!-- Green Overlay for Completed Status -->
+          <div
+            v-if="project?.progress >= 100 || project.status == 'completed'"
+            class="absolute inset-0 bg-green-100 bg-opacity-70 flex items-center justify-center flex-col"
+          >
+            <i class="pi pi-check-circle text-green-600 text-3xl"></i>
+            <span class="text-green-600 font-semibold">تم الاكتمال بنجاح</span>
+          </div>
         </div>
+
+        <!-- Progress Bar -->
         <div
+          v-if="project?.progress < 100 && project.status != 'completed'"
           :style="`width: ${project.progress}%`"
           class="text-xs -mt-3 mb-6 z-40 font-semibold bg-white text-black p-1 rounded-3xl"
         >
           {{ project.progress }}%
+        </div>
+        <div
+          v-if="project?.progress >= 100 || project.status == 'completed'"
+          :style="`width: 100%`"
+          class="text-xs -mt-3 mb-6 z-40 font-semibold bg-green-600 text-white p-1 rounded-3xl"
+        >
+          تم اكمال التبرع بنجاح
         </div>
 
         <!-- التفاصيل -->
@@ -81,22 +99,26 @@
           <p class="text-sm">{{ project.title }}</p>
           <div class="text-center">
             <p class="text-xs text-white/90 mt-1">المبلغ المطلوب:</p>
-            <p class="text-xs text-white/90 mt-1">
+            <p class="font-semibold text-white/90 mt-1">
               {{ project.target_amount.toLocaleString() }}
             </p>
           </div>
         </div>
 
-        <!-- إدخال مبلغ -->
+        <!-- إدخال مبلغ (only if not completed) -->
         <InputText
+          v-if="project?.progress < 100 && project.status != 'completed'"
           v-model.number="project.amount"
           type="number"
           placeholder="مبلغ التبرع"
           class="mt-3 w-full text-sm text-right"
         />
 
-        <!-- الأزرار -->
-        <div class="flex justify-between gap-2 mt-4 w-full">
+        <!-- الأزرار (only if not completed) -->
+        <div
+          v-if="project?.progress < 100 && project.status != 'completed'"
+          class="flex justify-between gap-2 mt-4 w-full"
+        >
           <Button
             label="الدفع الآن"
             severity="secondary"

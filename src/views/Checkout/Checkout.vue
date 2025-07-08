@@ -15,7 +15,7 @@
           <div class="space-y-4">
             <div>
               <label class="block mb-1 text-sm font-medium"
-                >الاسم الكامل (اختياري)</label
+                >الاسم (اختياري)</label
               >
               <InputText
                 v-model="checkout.name"
@@ -32,9 +32,15 @@
                 v-model="checkout.phone"
                 :disabled="isLoadingUser || isLoggedIn"
                 class="w-full text-right"
+                :class="{ 'p-invalid': !phoneValid && checkout.phone }"
                 :readonly="isLoggedIn"
                 required
+                @input="validatePhone"
               />
+              <small v-if="!phoneValid && checkout.phone" class="p-error">
+                يرجى إدخال رقم جوال سعودي صالح (مثال: +966501234567 أو
+                0501234567)
+              </small>
             </div>
             <!-- Show email field only for logged-in users -->
             <div v-if="isLoggedIn">
@@ -113,7 +119,7 @@
 
       <!-- زر الدفع -->
       <div class="mt-8">
-        <!-- <Button
+        <Button
           label="تأكيد الدفع"
           severity="primary"
           class="w-full"
@@ -121,10 +127,11 @@
             isLoadingPaymentMethods ||
             isLoadingUser ||
             !checkout.paymentMethod ||
-            !checkout.phone
+            !checkout.phone ||
+            !phoneValid
           "
           @click="submitPayment"
-        /> -->
+        />
       </div>
     </div>
   </div>
@@ -160,8 +167,17 @@ const checkout = reactive({
   name: "",
   phone: "",
   email: "",
-  paymentMethod: "", // Will be set to apple_pay after payment methods are fetched
+  paymentMethod: "",
 });
+
+// Phone validation state
+const phoneValid = ref(true);
+
+// Saudi phone number validation function
+const validatePhone = () => {
+  const saudiPhoneRegex = /^(?:\+9665|05)\d{8}$/;
+  phoneValid.value = saudiPhoneRegex.test(checkout.phone);
+};
 
 // Payment methods from backend
 const paymentMethods = ref([]);
@@ -191,9 +207,10 @@ const fetchUserData = async () => {
     if (localStorage.getItem("accessToken")) {
       const response = await request.get("/tokens/me");
       const user = response.data;
-      checkout.name = user.name || "";
+      checkout的名字 = user.name || "";
       checkout.phone = user.phone || "";
       checkout.email = user.email || "";
+      validatePhone(); // Validate phone number if fetched
       if (!user.phone) {
         toast.add({
           severity: "error",
@@ -269,11 +286,11 @@ const fetchPaymentMethods = async () => {
 const saveGuestUserData = async () => {
   if (isLoggedIn.value) return; // Skip for logged-in users
 
-  if (!checkout.phone) {
+  if (!checkout.phone || !phoneValid.value) {
     toast.add({
       severity: "error",
       summary: "خطأ",
-      detail: "يرجى إدخال رقم الجوال.",
+      detail: "يرجى إدخال رقم جوال سعودي صالح.",
       life: 3000,
     });
     return false;
@@ -281,7 +298,7 @@ const saveGuestUserData = async () => {
 
   try {
     await request.post("/guest-users", {
-      name: checkout.name || "Guest", // Provide default name if empty
+      name: checkout.name || "Guest",
       phone: checkout.phone,
     });
     toast.add({
@@ -421,11 +438,11 @@ const savePaymentOnBackend = async (payment) => {
 
 // Submit payment
 const submitPayment = async () => {
-  if (!checkout.phone || !checkout.paymentMethod) {
+  if (!checkout.phone || !phoneValid.value || !checkout.paymentMethod) {
     toast.add({
       severity: "error",
       summary: "خطأ",
-      detail: "رقم الجوال وطريقة الدفع مطلوبان.",
+      detail: "يرجى إدخال رقم جوال سعودي صالح واختيار طريقة دفع.",
       life: 3000,
     });
     return;
@@ -455,5 +472,12 @@ onMounted(async () => {
 .apple-form {
   display: block;
   margin-top: 1rem;
+}
+.p-invalid {
+  border-color: #ef4444 !important;
+}
+.p-error {
+  color: #ef4444;
+  font-size: 0.875rem;
 }
 </style>

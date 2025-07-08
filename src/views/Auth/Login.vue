@@ -16,7 +16,7 @@
           <div class="relative">
             <InputText
               v-model="data.phone"
-              placeholder="أدخل رقم الجوال (مثال: 9665XXXXXXXX أو 05XXXXXXXX)"
+              placeholder="أدخل رقم الجوال (05XXXXXXXX أو 05XXXXXXXX)"
               class="input-field pr-10"
               @input="validateForm"
             />
@@ -114,7 +114,7 @@ const validateForm = () => {
     // Remove any non-digit characters for validation
     const cleanedPhone = data.value.phone.replace(/[^\d]/g, "");
     // Saudi numbers start with 9665 or 05 followed by 8 digits
-    const saudiPhoneRegex = /^(9665\d{8}$)|(05\d{8}$)|(\+9665\d{8}$)/;
+    const saudiPhoneRegex = /^(05\d{8}$)|(05\d{8}$)|(05\d{8}$)/;
     if (!saudiPhoneRegex.test(data.value.phone)) {
       errors.phone =
         "يرجى إدخال رقم جوال سعودي صالح (مثال: 9665XXXXXXXX أو 05XXXXXXXX)";

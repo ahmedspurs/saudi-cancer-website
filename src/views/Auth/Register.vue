@@ -145,7 +145,7 @@ const validateForm = () => {
     errors.phone = "يرجى إدخال رقم الجوال";
   } else {
     // Saudi numbers start with 9665, 05, or +9665 followed by 8 digits
-    const saudiPhoneRegex = /^(9665\d{8}$)|(05\d{8}$)|(\+9665\d{8}$)/;
+    const saudiPhoneRegex = /^(05\d{8}$)|(05\d{8}$)|(05\d{8}$)/;
     if (!saudiPhoneRegex.test(data.value.phone)) {
       errors.phone =
         "يرجى إدخال رقم جوال سعودي صالح (مثال: 9665XXXXXXXX أو 05XXXXXXXX)";
