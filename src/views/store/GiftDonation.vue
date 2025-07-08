@@ -1,9 +1,8 @@
 <template>
   <div
-    class="flex flex-col justify-center items-center mt-20 pb-32 container"
+    class="flex flex-col justify-center items-center pb-12 container"
     dir="rtl"
   >
-    <ValiditySection />
     <div class="w-full max-w-xl rounded-lg">
       <h2
         class="text-center text-2xl text-secondary font-semibold my-6 section-divider-lg"
@@ -95,6 +94,7 @@
         </div>
       </form>
     </div>
+    <ValiditySection class="my-12" />
   </div>
 </template>
 

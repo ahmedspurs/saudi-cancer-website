@@ -5,19 +5,8 @@ import { createStore } from "vuex";
 const store = createStore({
   state() {
     return {
-      baseUrl: "https://swges.org/",
-      imageUrl: "https://images.lahn.sa/SWGESE/Images/",
-      images: [
-        "https://images.lahn.sa/SWGESE/Images/Specars/1.jpeg",
-        "https://images.lahn.sa/SWGESE/Images/Specars/2.jpeg",
-        "https://images.lahn.sa/SWGESE/Images/Specars/3.jpeg",
-        "https://images.lahn.sa/SWGESE/Images/Specars/4.jpeg",
-        "https://images.lahn.sa/SWGESE/Images/Specars/5.jpeg",
-        "https://images.lahn.sa/SWGESE/Images/Specars/6.jpeg",
-        "https://images.lahn.sa/SWGESE/Images/Specars/7.jpeg",
-        "https://images.lahn.sa/SWGESE/Images/Specars/8.jpeg",
-        "https://images.lahn.sa/SWGESE/Images/Specars/9.jpeg",
-      ],
+      baseUrl: "http://localhost:3030/",
+      // baseUrl: "https://api.ratlclinic.com/",
     };
   },
 });

@@ -1,8 +1,7 @@
 <template>
-  <div class="p-6 bg-white mt-20 container" dir="rtl">
+  <div class="p-6 bg-white container" dir="rtl">
     <Toast />
 
-    <ValiditySection />
     <h2
       v-if="type == 'major'"
       class="text-center text-xl font-semibold text-purple-600 my-8"
@@ -53,12 +52,21 @@
         class="bg-secondary text-white rounded-lg p-4 shadow-md flex flex-col"
       >
         <!-- صورة المشروع -->
-        <div class="w-full h-40 bg-white rounded-md overflow-hidden relative">
+        <div
+          class="w-full h-40 flex-col-center bg-white rounded-md overflow-hidden relative"
+        >
           <Image
-            :src="!project.image_url ? project.image_url : placeholder"
-            alt="project image"
-            class="w-full h-full object-cover"
+            :src="
+              project?.image_url
+                ? `${$store?.state?.baseUrl}${
+                    project?.image_url?.split('public/')[1]
+                  }`
+                : placeholder
+            "
+            imageClass="w-full h-full object-cover"
             preview
+            alt="صورة الحساب"
+            class="w-full h-full !object-cover !object-center"
           />
         </div>
         <div
@@ -125,6 +133,8 @@
         @click="changePage(pagination.current_page + 1)"
       />
     </div>
+
+    <ValiditySection class="my-12" />
   </div>
 </template>
 

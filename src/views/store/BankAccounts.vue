@@ -7,6 +7,7 @@
     <Message v-if="error" severity="error" class="mb-4">
       {{ error }}
     </Message>
+    <Toast />
 
     <!-- Card Grid -->
     <div
@@ -19,17 +20,29 @@
             <!-- Image with Fallback -->
             <div class="h-32 mb-4 w-full">
               <Image
-                :src="fallbackImage"
+                :src="
+                  account?.image
+                    ? `${$store?.state?.baseUrl}${
+                        account?.image?.split('public/')[1]
+                      }`
+                    : fallbackImage
+                "
                 preview
                 alt="صورة الحساب"
-                class="w-full h-full mb-4 object-cover"
+                imageClass="w-full h-full object-cover"
               />
             </div>
 
             <!-- Account Details -->
             <div class="text-right w-full p-4">
-              <p class="font-bold text-lg">
+              <p class="font-bold text-lg flex items-center justify-between">
                 رقم الحساب: {{ account.account_number }}
+
+                <Button
+                  label="نسخ"
+                  @click="copyToClipboard(account.account_number)"
+                  class="text-sm text-purple-600 hover:underline mt-2"
+                />
               </p>
               <p class="text-gray-600">
                 اسم الحامل: {{ account.account_holder_name }}
@@ -43,7 +56,7 @@
 
     <!-- Empty State -->
     <div v-else-if="!loading && !error" class="text-center py-6">
-      <p class="text-gray-500">لا توجد حسابات مصرفية متاحة.</p>
+      <NoData />
     </div>
   </div>
 </template>
@@ -55,11 +68,14 @@ import Message from "primevue/message";
 import ProgressSpinner from "primevue/progressspinner";
 import request from "../../services/request";
 import Image from "primevue/image";
+import NoData from "../../components/NoData.vue";
+import { useToast } from "primevue/usetoast";
 
 const accounts = ref([]);
 const loading = ref(false);
 const error = ref(null);
 const fallbackImage = "/images/main-logo.png";
+const toast = useToast();
 
 const fetchAccounts = async () => {
   loading.value = true;
@@ -72,6 +88,16 @@ const fetchAccounts = async () => {
   } finally {
     loading.value = false;
   }
+};
+
+const copyToClipboard = (text) => {
+  navigator.clipboard.writeText(text);
+  toast.add({
+    severity: "success",
+    summary: "نجاح",
+    detail: `تم النسخ بنجاح`,
+    life: 3000,
+  });
 };
 
 onMounted(() => {

@@ -196,7 +196,6 @@ const mainNavLinks = [
 ];
 
 const secondaryNavLinks = [
-  { text: "الاهدائات", to: "/gift-donation", icon: "fa-solid fa-gift" },
   {
     text: "حالات كبرى",
     to: "/donation-cases/major",
@@ -212,6 +211,7 @@ const secondaryNavLinks = [
     to: "/donation-cases/urgent",
     icon: "fa-solid fa-ambulance",
   },
+  { text: "الاهدائات", to: "/gift-donation", icon: "fa-solid fa-gift" },
 ];
 
 const socialLinks = [

@@ -21,7 +21,11 @@ import BankAccounts from "../views/Store/BankAccounts.vue";
 import Profile from "../views/Auth/Profile.vue";
 import DonationReciept from "../views/Checkout/DonationReciept.vue";
 const routes = [
-  { path: "/", component: GiftDonation },
+  {
+    path: "/",
+    redirect: "/donation-cases/urgent",
+    props: true, // Pass route params as props to the component
+  },
   { path: "/about", component: About },
   { path: "/programs", component: Programs },
   { path: "/partners", component: Partners },
