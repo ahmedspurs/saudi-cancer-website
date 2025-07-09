@@ -187,7 +187,7 @@ const isLoadingUser = ref(false);
 // Moyasar configuration
 const moyasarConfig = {
   publishable_api_key: import.meta.env.VITE_MOYASAR_API_KEY,
-  callback_url: "http://localhost:3000/payment-callback",
+  callback_url: window.location.origin + "/payment-callback",
   element: ".moyasar-form",
   apple_element: ".apple-form",
 };
