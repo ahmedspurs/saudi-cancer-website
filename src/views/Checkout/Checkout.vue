@@ -773,26 +773,8 @@ const submitPayment = async () => {
     });
 
     const payment = paymentResponse;
-    if (payment.status === "initiated" && payment.transaction_url) {
-      await savePaymentOnBackend(payment);
-      window.location.href = payment.transaction_url; // Redirect for 3D Secure
-    } else if (payment.status === "paid") {
-      await savePaymentOnBackend(payment);
-      toast.add({
-        severity: "success",
-        summary: "نجاح",
-        detail: "تمت عملية الدفع بنجاح!",
-        life: 3000,
-      });
-      window.location.href = "/success";
-    } else {
-      toast.add({
-        severity: "error",
-        summary: "خطأ",
-        detail: payment.message || "فشل معالجة الدفع.",
-        life: 3000,
-      });
-    }
+    await savePaymentOnBackend(payment);
+    window.location.href = payment.transaction_url; // Redirect for 3D Secure
   } catch (error) {
     console.error("Error processing payment:", error);
     toast.add({
