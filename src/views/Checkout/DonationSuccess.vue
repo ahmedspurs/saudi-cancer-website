@@ -290,6 +290,10 @@ const submitRating = async (value) => {
 onMounted(() => {
   if (route.query.id) {
     verifyPayment();
+  } else {
+    paymentStatus.value = "failed";
+    errorMessage.value = "عفوا الدفع لم يكتمل بشكل صحيح";
+    isLoading.value = false;
   }
 });
 
