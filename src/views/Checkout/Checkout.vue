@@ -780,7 +780,7 @@ const submitPayment = async () => {
     toast.add({
       severity: "error",
       summary: "خطأ",
-      detail: "فشل معالجة الدفع. حاول مرة أخرى.",
+      detail: error,
       life: 3000,
     });
   }
