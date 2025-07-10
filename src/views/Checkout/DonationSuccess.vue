@@ -21,7 +21,7 @@
       <!-- pending state -->
       <template v-if="paymentStatus == 'pending'">
         <div class="text-yellow-500 text-5xl mb-4">
-          <i class="fas fa-hourglass-half"></i>
+          <i class="fas fa-hourglass-half fa-spin"></i>
         </div>
         <h2 class="text-xl font-bold text-yellow-700 mb-2">
           جاري معالجة الدفع

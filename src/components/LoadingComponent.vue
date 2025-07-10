@@ -4,9 +4,9 @@
   >
     <div class="bg-white p-4 rounded-lg shadow-lg">
       <div class="flex justify-center">
-        <div
-          class="w-8 h-8 border-4 border-t-4 border-blue-500 border-solid rounded-full animate-spin"
-        ></div>
+        <i
+          class="fa-solid fa-circle-notch fa-spin text-secondary text-[25px]"
+        ></i>
       </div>
       <p class="text-center mt-2 text-gray-700">جاري التحميل...</p>
     </div>
