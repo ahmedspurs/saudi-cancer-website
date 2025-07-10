@@ -139,6 +139,7 @@ const verifyPayment = async () => {
     const response = await request.get(
       `/payments/verify?paymentId=${route.query.id}`
     );
+    console.log(response.payment_status);
 
     if (response.status) {
       if (response.payment_status == "pending") {
@@ -153,12 +154,14 @@ const verifyPayment = async () => {
         errorMessage.value = response.msg || errorMessage.value;
       }
     } else {
-      paymentStatus.value = "failed";
+      paymentStatus.value = "pending";
       errorMessage.value = response.msg || errorMessage.value;
+      startPolling();
     }
   } catch (error) {
-    paymentStatus.value = "failed";
+    paymentStatus.value = "pending";
     errorMessage.value = error.response?.msg || errorMessage.value;
+    startPolling();
   } finally {
     if (paymentStatus.value !== "pending") {
       isLoading.value = false;
