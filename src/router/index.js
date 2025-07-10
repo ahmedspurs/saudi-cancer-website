@@ -37,7 +37,7 @@ const routes = [
   { path: "/register", component: Register },
   { path: "/gift-donation", component: GiftDonation },
   { path: "/bank-accounts", component: BankAccounts },
-  { path: "/donation-reciept", component: DonationReciept },
+  { path: "/donation-reciept", component: DonationReciept, props: true },
   {
     path: "/donation-cases/:type",
     name: "DonationCases",

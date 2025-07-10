@@ -5,6 +5,7 @@
   >
     <div
       class="bg-white rounded-xl shadow-lg w-full max-w-4xl p-6 text-right border-2 border-purple-600"
+      id="receipt-content"
     >
       <!-- Loading State -->
       <ProgressSpinner v-if="loading" class="flex justify-center mx-auto" />
@@ -99,12 +100,24 @@
           <span>{{ amountInWords(receipt.amount) }}</span>
         </div>
 
-        <!-- Print Button -->
-        <div class="mt-6 flex justify-center">
+        <!-- Action Buttons -->
+        <div
+          class="mt-6 no-print flex justify-center space-x-4 space-x-reverse"
+        >
+          <button
+            @click="saveAsPDF"
+            class="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-6 rounded-md transition-colors duration-200"
+            :disabled="isProcessing"
+          >
+            <i class="fas fa-file-pdf mr-2"></i>
+            حفظ كـ PDF
+          </button>
           <button
             @click="print"
             class="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-6 rounded-md transition-colors duration-200"
+            :disabled="isProcessing"
           >
+            <i class="fas fa-print mr-2"></i>
             طباعة الإيصال
           </button>
         </div>
@@ -130,17 +143,20 @@ import Message from "primevue/message";
 import Toast from "primevue/toast";
 import Image from "primevue/image";
 import request from "../../services/request";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
 const route = useRoute();
 const toast = useToast();
 const receipt = ref(null);
 const loading = ref(false);
 const error = ref(null);
+const isProcessing = ref(false);
 
 // Fetch receipt data
 const fetchReceipt = async () => {
   loading.value = true;
-  const payment_id = route.query.payment_id;
+  const payment_id = route.query.paymentId;
 
   try {
     const response = await request.post(`/payments/user/reciept`, {
@@ -201,6 +217,77 @@ const amountInWords = (amount) => {
     : `${parseFloat(amount).toLocaleString("ar-SA")} ريال سعودي فقط لا غير`;
 };
 
+// Save as PDF
+const saveAsPDF = async () => {
+  try {
+    isProcessing.value = true;
+    const element = document.getElementById("receipt-content");
+    if (!element) throw new Error("Receipt content not found");
+
+    // Hide buttons for PDF capture
+    const buttons = element.querySelector(".flex.justify-center");
+    if (buttons) buttons.style.display = "none";
+
+    // Capture the receipt content as a canvas
+    const canvas = await html2canvas(element, {
+      scale: 2, // Increase resolution for better quality
+      useCORS: true, // Handle cross-origin images (e.g., logo)
+    });
+
+    // Restore buttons visibility
+    if (buttons) buttons.style.display = "flex";
+
+    const imgData = canvas.toDataURL("image/png");
+    const pdf = new jsPDF({
+      orientation: "portrait",
+      unit: "mm",
+      format: "a4",
+    });
+
+    // Add Arabic font (assuming Amiri is available)
+    pdf.addFont("Amiri-Regular.ttf", "Amiri", "normal");
+    pdf.setFont("Amiri");
+
+    // Calculate image dimensions to fit A4 (210mm x 297mm)
+    const imgWidth = 190; // Slightly less than A4 width for margins
+    const pageHeight = 297;
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+    let heightLeft = imgHeight;
+    let position = 10; // Top margin
+
+    // Add image to PDF
+    pdf.addImage(imgData, "PNG", 10, position, imgWidth, imgHeight);
+    heightLeft -= pageHeight - 20; // Account for margins
+
+    // Handle multi-page content
+    while (heightLeft >= 0) {
+      position = heightLeft - imgHeight + 10; // Adjust for new page
+      pdf.addPage();
+      pdf.addImage(imgData, "PNG", 10, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight - 20;
+    }
+
+    // Save the PDF
+    pdf.save(`receipt_${receipt.value.payment_id || "donation"}.pdf`);
+    toast.add({
+      severity: "success",
+      summary: "نجاح",
+      detail: "تم حفظ الإيصال كملف PDF",
+      life: 3000,
+    });
+  } catch (err) {
+    console.error("Error generating PDF:", err);
+    toast.add({
+      severity: "error",
+      summary: "خطأ",
+      detail: "فشل في حفظ الإيصال كملف PDF",
+      life: 3000,
+    });
+  } finally {
+    isProcessing.value = false;
+  }
+};
+
 // Print function
 const print = () => {
   window.print();
@@ -212,6 +299,6 @@ onMounted(() => {
 });
 </script>
 
-<style scoped>
-/* Add custom styles if needed */
+<style>
+/* Hide buttons and other UI elements during printing */
 </style>

@@ -12,6 +12,17 @@
 html {
   scroll-behavior: smooth !important;
 }
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  #receipt-content {
+    width: 100%;
+    margin: 0;
+    padding: 10mm;
+  }
+}
 
 
 

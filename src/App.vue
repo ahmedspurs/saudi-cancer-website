@@ -32,12 +32,12 @@ export default {
 
 <template>
   <div>
-    <StoreHeader />
+    <StoreHeader class="no-print" />
     <transition name="fade" mode="out-in">
       <router-view :key="$route.fullPath" />
     </transition>
 
-    <main-footer />
+    <main-footer class="no-print" />
     <!-- <div class="fixed top-1/2 end-4">
       <div class="p-2 rounded-xl flex-col-center bg-secondary">
         <img src="/icons/instagram-white.svg" class="mt-2" alt="" />

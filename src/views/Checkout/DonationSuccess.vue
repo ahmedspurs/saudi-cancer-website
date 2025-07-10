@@ -8,7 +8,7 @@
       class="bg-white shadow-md rounded-lg p-8 w-full max-w-md text-center"
       v-if="!isLoading"
     >
-      <!-- Loading state -->
+      <!-- Processing overlay -->
       <div
         v-if="isProcessing"
         class="absolute inset-0 flex items-center justify-center bg-white bg-opacity-75"
@@ -18,8 +18,32 @@
         ></div>
       </div>
 
+      <!-- Pending state -->
+      <template v-if="paymentStatus == 'pending'">
+        <div class="text-yellow-500 text-5xl mb-4">
+          <i class="fas fa-hourglass-half"></i>
+        </div>
+        <h2 class="text-xl font-bold text-yellow-700 mb-2">
+          جاري معالجة الدفع
+        </h2>
+        <p class="text-gray-600 mb-6">
+          يرجى الانتظار بينما تتم معالجة عملية الدفع الخاصة بك...
+          <span v-if="paymentId"> (رقم العملية: {{ paymentId }})</span>
+        </p>
+        <!-- Optional cancel button (uncomment if needed) -->
+        <!--
+        <Button
+          label="إلغاء العملية"
+          icon="pi pi-times"
+          class="p-button w-full bg-red-600 hover:bg-red-700 text-white font-semibold"
+          :disabled="isProcessing"
+          @click="cancelPayment"
+        />
+        -->
+      </template>
+
       <!-- Success state -->
-      <template v-if="paymentStatus === 'success'">
+      <template v-else-if="paymentStatus == 'success'">
         <div class="text-green-500 text-5xl mb-4">
           <i class="fas fa-check-circle"></i>
         </div>
@@ -28,8 +52,6 @@
           شكرًا لك على مساهمتك الكريمة
           <span v-if="paymentId"> (رقم العملية: {{ paymentId }})</span>
         </p>
-
-        <!-- Receipt and Home buttons -->
         <div class="space-y-4">
           <Button
             label="عرض الإيصال"
@@ -46,8 +68,6 @@
             />
           </router-link>
         </div>
-
-        <!-- Rating section -->
         <div class="mt-8">
           <p class="mb-2 font-medium text-gray-700">ما رأيك في تجربتك؟</p>
           <div class="flex justify-center gap-1">
@@ -97,7 +117,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { useToast } from "primevue/usetoast";
 import request from "../../services/request";
@@ -108,9 +128,10 @@ const toast = useToast();
 const rating = ref(0);
 const isLoading = ref(true);
 const isProcessing = ref(false);
-const paymentStatus = ref("success");
+const paymentStatus = ref(null);
 const paymentId = ref(null);
 const errorMessage = ref("حدث خطأ أثناء معالجة الدفع، يرجى المحاولة مرة أخرى");
+const pollingInterval = ref(null);
 
 const verifyPayment = async () => {
   try {
@@ -120,8 +141,17 @@ const verifyPayment = async () => {
     );
 
     if (response.status) {
-      paymentStatus.value = "success";
-      paymentId.value = route.query.id;
+      if (response.payment_status == "pending") {
+        paymentStatus.value = "pending";
+        paymentId.value = route.query.id;
+        startPolling();
+      } else if (response.payment_status == "success") {
+        paymentStatus.value = "success";
+        paymentId.value = route.query.id;
+      } else {
+        paymentStatus.value = "failed";
+        errorMessage.value = response.msg || errorMessage.value;
+      }
     } else {
       paymentStatus.value = "failed";
       errorMessage.value = response.msg || errorMessage.value;
@@ -130,20 +160,88 @@ const verifyPayment = async () => {
     paymentStatus.value = "failed";
     errorMessage.value = error.response?.msg || errorMessage.value;
   } finally {
-    isLoading.value = false;
+    if (paymentStatus.value !== "pending") {
+      isLoading.value = false;
+    }
   }
 };
+
+const startPolling = () => {
+  // Clear any existing polling
+  if (pollingInterval.value) {
+    clearInterval(pollingInterval.value);
+  }
+
+  // Poll every 5 seconds
+  pollingInterval.value = setInterval(async () => {
+    try {
+      const response = await request.get(
+        `/payments/verify?paymentId=${route.query.id}`
+      );
+
+      if (response.status) {
+        if (response.payment_status == "success") {
+          paymentStatus.value = "success";
+          paymentId.value = route.query.id;
+          clearInterval(pollingInterval.value);
+          isLoading.value = false;
+        } else if (response.payment_status == "failed") {
+          paymentStatus.value = "failed";
+          errorMessage.value = response.msg || errorMessage.value;
+          clearInterval(pollingInterval.value);
+          isLoading.value = false;
+        }
+        // Continue polling if still pending
+      } else {
+        paymentStatus.value = "failed";
+        errorMessage.value = response.msg || errorMessage.value;
+        clearInterval(pollingInterval.value);
+        isLoading.value = false;
+      }
+    } catch (error) {
+      paymentStatus.value = "failed";
+      errorMessage.value = error.response?.msg || errorMessage.value;
+      clearInterval(pollingInterval.value);
+      isLoading.value = false;
+    }
+  }, 5000); // Poll every 5 seconds
+};
+
+/*
+const cancelPayment = async () => {
+  try {
+    isProcessing.value = true;
+    await request.post(`/payments/cancel?paymentId=${paymentId.value}`);
+    paymentStatus.value = "failed";
+    errorMessage.value = "تم إلغاء عملية الدفع";
+    clearInterval(pollingInterval.value);
+    isLoading.value = false;
+    toast.add({
+      severity: "info",
+      summary: "إلغاء",
+      detail: "تم إلغاء عملية الدفع بنجاح",
+      life: 3000,
+    });
+  } catch (error) {
+    console.error("Error cancelling payment:", error);
+    toast.add({
+      severity: "error",
+      summary: "خطأ",
+      detail: "فشل في إلغاء عملية الدفع",
+      life: 3000,
+    });
+  } finally {
+    isProcessing.value = false;
+  }
+};
+*/
 
 const viewReceipt = async () => {
   try {
     isProcessing.value = true;
-    const response = await request.get(`/payment/receipt${paymentId.value}`);
-    window.open(response.receiptUrl, "_blank");
-    toast.add({
-      severity: "success",
-      summary: "نجاح",
-      detail: "تم عرض الإيصال بنجاح",
-      life: 3000,
+    router.push({
+      path: "/donation-reciept/",
+      query: { paymentId: paymentId.value },
     });
   } catch (error) {
     console.error("Error fetching receipt:", error);
@@ -193,6 +291,13 @@ onMounted(() => {
     isLoading.value = false;
   }
 });
+
+onUnmounted(() => {
+  // Clean up polling interval when component is unmounted
+  if (pollingInterval.value) {
+    clearInterval(pollingInterval.value);
+  }
+});
 </script>
 
 <style scoped>
@@ -223,6 +328,12 @@ button:disabled {
 }
 .p-button.bg-purple-600:hover {
   background-color: #5b21b6;
+}
+.p-button.bg-red-600 {
+  background-color: #dc2626;
+}
+.p-button.bg-red-600:hover {
+  background-color: #b91c1c;
 }
 .p-button.p-button-secondary {
   background-color: #e5e7eb;
