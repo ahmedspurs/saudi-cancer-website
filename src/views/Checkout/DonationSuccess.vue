@@ -18,7 +18,7 @@
         ></div>
       </div>
 
-      <!-- Pending state -->
+      <!-- pending state -->
       <template v-if="paymentStatus == 'pending'">
         <div class="text-yellow-500 text-5xl mb-4">
           <i class="fas fa-hourglass-half"></i>
@@ -145,6 +145,8 @@ const verifyPayment = async () => {
       if (response.payment_status == "pending") {
         paymentStatus.value = "pending";
         paymentId.value = route.query.id;
+        console.log("penging state");
+
         startPolling();
       } else if (response.payment_status == "success") {
         paymentStatus.value = "success";
@@ -163,9 +165,8 @@ const verifyPayment = async () => {
     errorMessage.value = error.response?.msg || errorMessage.value;
     startPolling();
   } finally {
-    if (paymentStatus.value !== "pending") {
-      isLoading.value = false;
-    }
+    isLoading.value = false;
+    isProcessing.value = false;
   }
 };
 
@@ -181,6 +182,8 @@ const startPolling = () => {
       const response = await request.get(
         `/payments/verify?paymentId=${route.query.id}`
       );
+      console.log(response.payment_status, response.status);
+      paymentStatus.value = response.payment_status;
 
       if (response.status) {
         if (response.payment_status == "success") {
@@ -196,15 +199,13 @@ const startPolling = () => {
         }
         // Continue polling if still pending
       } else {
-        paymentStatus.value = "failed";
+        paymentStatus.value = "pending";
         errorMessage.value = response.msg || errorMessage.value;
-        clearInterval(pollingInterval.value);
         isLoading.value = false;
       }
     } catch (error) {
-      paymentStatus.value = "failed";
+      paymentStatus.value = "pending";
       errorMessage.value = error.response?.msg || errorMessage.value;
-      clearInterval(pollingInterval.value);
       isLoading.value = false;
     }
   }, 5000); // Poll every 5 seconds
@@ -289,9 +290,6 @@ const submitRating = async (value) => {
 onMounted(() => {
   if (route.query.id) {
     verifyPayment();
-  } else {
-    paymentStatus.value = "failed";
-    isLoading.value = false;
   }
 });
 
