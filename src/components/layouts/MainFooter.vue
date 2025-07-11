@@ -49,9 +49,15 @@
     <div
       class="bg-secondary text-sm container py-4 px-4 flex flex-col md:flex-row items-center justify-between"
     >
-      <span>تصميم وبرمجة واستضافة لحن</span>
-      <div class="flex space-x-4 items-center mt-2 md:mt-0">
+      <a href="https://lahn.sa" target="_blank" class="h-[50px]"
+        ><Image
+          src="/images/white-footer-logo.png"
+          imageClass="w-full h-full object-contain"
+        ></Image
+      ></a>
+      <div class="flex items-center mt-2 md:mt-0">
         <svg
+          class="me-2"
           width="26"
           height="24"
           viewBox="0 0 26 24"
@@ -65,6 +71,7 @@
         </svg>
 
         <svg
+          class="me-2"
           width="26"
           height="24"
           viewBox="0 0 28 28"
@@ -77,6 +84,7 @@
           />
         </svg>
         <svg
+          class="me-2"
           width="26"
           height="24"
           viewBox="0 0 24 24"
@@ -91,6 +99,7 @@
           />
         </svg>
         <svg
+          class="me-2"
           width="26"
           height="24"
           viewBox="0 0 28 22"
@@ -103,9 +112,10 @@
           />
         </svg>
       </div>
-      <span> Design, programming and hosting by Lahn </span>
     </div>
   </footer>
 </template>
 
-<script setup></script>
+<script setup>
+import Image from "primevue/image";
+</script>

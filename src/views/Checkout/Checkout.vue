@@ -800,7 +800,9 @@ const submitPayment = async () => {
 
     const payment = paymentResponse;
     await savePaymentOnBackend(payment);
-    window.location.href = payment.transaction_url; // Redirect for 3D Secure
+    if (payment.status == "success") {
+      window.location.href = payment.transaction_url; // Redirect for 3D Secure
+    }
   } catch (error) {
     console.error("Error processing payment:", error);
     toast.add({
