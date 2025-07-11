@@ -630,6 +630,7 @@ const onApplePayButtonClicked = async () => {
         });
         return;
       }
+      await savePaymentOnBackend(payment);
 
       if (payment.status !== "paid") {
         session.completePayment({
@@ -645,7 +646,6 @@ const onApplePayButtonClicked = async () => {
         return;
       }
 
-      await savePaymentOnBackend(payment);
       session.completePayment(ApplePaySession.STATUS_SUCCESS);
       toast.add({
         severity: "success",
