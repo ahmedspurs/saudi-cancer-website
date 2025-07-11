@@ -800,7 +800,7 @@ const submitPayment = async () => {
 
     const payment = paymentResponse;
     await savePaymentOnBackend(payment);
-    if (payment.status == "success") {
+    if (payment.status != "failed") {
       window.location.href = payment.transaction_url; // Redirect for 3D Secure
     }
   } catch (error) {
