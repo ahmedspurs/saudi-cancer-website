@@ -653,7 +653,7 @@ const onApplePayButtonClicked = async () => {
         detail: "تمت عملية الدفع بنجاح!",
         life: 3000,
       });
-      window.location.href = moyasarConfig.callback_url;
+      window.location.href = moyasarConfig.callback_url + `?id=${payment.id}`;
     } catch (error) {
       console.error("Error processing payment:", error);
       session.completePayment({
