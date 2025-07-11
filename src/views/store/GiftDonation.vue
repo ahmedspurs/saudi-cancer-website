@@ -32,6 +32,9 @@
             class="input-field"
             placeholder="أدخل رسالة الإهداء (اختياري)"
           />
+          <p v-if="errors.message" class="text-red-200 text-xs mt-1">
+            {{ errors.message }}
+          </p>
         </div>
 
         <!-- Receiver Name and Phone -->
@@ -134,6 +137,9 @@ const validateForm = () => {
     : "يرجى إدخال رقم جوال المهدي إليه";
   errors.amount =
     form.amount && form.amount > 0 ? "" : "يرجى إدخال مبلغ تبرع صالح";
+  form.message && form.message.length > 130
+    ? ""
+    : "الرسالة طويلة جدا . يجب ان تحتوى الرسالة على 130 حرفا فقط .";
   return !errors.receiverName && !errors.receiverPhone && !errors.amount;
 };
 
