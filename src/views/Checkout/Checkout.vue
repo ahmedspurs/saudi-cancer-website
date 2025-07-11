@@ -261,7 +261,7 @@ const checkout = reactive({
   name: "",
   phone: "",
   email: "",
-  paymentMethod: "mada",
+  paymentMethod: "apple_pay",
 });
 
 // Card details for custom form
