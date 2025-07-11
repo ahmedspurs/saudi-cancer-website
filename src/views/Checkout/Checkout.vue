@@ -197,10 +197,9 @@
       >
         <apple-pay-button
           buttonstyle="black"
-          @click="onApplePayButtonClicked"
-          type="plain"
+          type="donate"
           locale="ar-SA"
-          style="width: 100%; height: 40px; min-width: 150px"
+          @click="onApplePayButtonClicked"
         ></apple-pay-button>
       </div>
       <div
@@ -241,6 +240,7 @@ import Dropdown from "primevue/dropdown";
 import InputText from "primevue/inputtext";
 import Button from "primevue/button";
 import PrimeToast from "primevue/toast";
+
 const toast = useToast();
 const router = useRouter();
 
@@ -369,6 +369,8 @@ const isLoadingUser = ref(false);
 const moyasarConfig = {
   publishable_api_key: import.meta.env.VITE_MOYASAR_API_KEY,
   callback_url: window.location.origin + "/payment-callback",
+  display_name: "Saudi Cancer", // Must match your store name
+  domain_name: window.location.hostname, // Must match registered domain
 };
 
 // Fetch user data from /tokens/me for logged-in users
@@ -508,9 +510,8 @@ const totalAmount = computed(() => {
 // Display total in major units for UI
 const totalAmountMajor = computed(() => totalAmount.value / 100);
 
-// Initialize form (no Moyasar SDK needed)
+// Initialize form
 const initializeForm = () => {
-  // Clear card details when payment method changes
   cardDetails.name = "";
   cardDetails.number = "";
   cardDetails.month = "";
@@ -525,7 +526,7 @@ const onApplePayButtonClicked = async () => {
     toast.add({
       severity: "error",
       summary: "خطأ",
-      detail: "Apple Pay غير متاح على هذا الجهاز.",
+      detail: "Apple Pay غير متاح على هذا الجهاز أو المتصفح.",
       life: 3000,
     });
     return;
@@ -534,33 +535,37 @@ const onApplePayButtonClicked = async () => {
   const paymentRequest = {
     countryCode: "SA",
     currencyCode: "SAR",
-    supportedNetworks: ["visa", "masterCard", "mada"],
+    supportedNetworks: ["visa", "mastercard", "amex", "mada"],
     merchantCapabilities: ["supports3DS"],
     total: {
-      label: "Saudi Cancer",
+      label: moyasarConfig.display_name,
       amount: (totalAmount.value / 100).toFixed(2),
     },
   };
 
-  const session = new ApplePaySession(10, paymentRequest);
+  const session = new ApplePaySession(6, paymentRequest);
 
   session.onvalidatemerchant = async (event) => {
     try {
+      const body = {
+        validation_url: event.validationURL,
+        display_name: moyasarConfig.display_name,
+        domain_name: moyasarConfig.domain_name,
+        publishable_api_key: moyasarConfig.publishable_api_key,
+      };
       const response = await fetch(
         "https://api.moyasar.com/v1/applepay/initiate",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Basic ${btoa(
-              moyasarConfig.publishable_api_key + ":"
-            )}`,
           },
-          body: JSON.stringify({
-            validationURL: event.validationURL,
-          }),
+          body: JSON.stringify(body),
         }
       );
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
       const merchantSession = await response.json();
       session.completeMerchantValidation(merchantSession);
     } catch (error) {
@@ -577,6 +582,16 @@ const onApplePayButtonClicked = async () => {
 
   session.onpaymentauthorized = async (event) => {
     const paymentToken = event.payment.token;
+    const description = `Donation: ${donationCases
+      .map((item) => `${item.title} x${item.qty || 1}`)
+      .join(", ")}${
+      donationGifts.length > 0
+        ? `; Gifts: ${donationGifts
+            .map((gift) => gift.receiver_name)
+            .join(", ")}`
+        : ""
+    }`;
+
     try {
       const response = await fetch("https://api.moyasar.com/v1/payments", {
         method: "POST",
@@ -589,45 +604,62 @@ const onApplePayButtonClicked = async () => {
         body: JSON.stringify({
           amount: totalAmount.value,
           currency: "SAR",
-          description: `Donation: ${donationCases
-            .map((item) => `${item.title} x${item.qty || 1}`)
-            .join(", ")}${
-            donationGifts.length > 0
-              ? `; Gifts: ${donationGifts
-                  .map((gift) => gift.receiver_name)
-                  .join(", ")}`
-              : ""
-          }`,
+          description,
           callback_url: moyasarConfig.callback_url,
           source: {
             type: "applepay",
             token: paymentToken,
           },
+          metadata: {
+            order_id: `order_${Date.now()}`, // Optional: Add unique identifier
+          },
         }),
       });
       const payment = await response.json();
-      if (payment.status === "initiated") {
-        session.completePayment(ApplePaySession.STATUS_SUCCESS);
-        await savePaymentOnBackend(payment);
-        toast.add({
-          severity: "success",
-          summary: "نجاح",
-          detail: "تمت عملية الدفع بنجاح!",
-          life: 3000,
+
+      if (!payment.id) {
+        session.completePayment({
+          status: ApplePaySession.STATUS_FAILURE,
+          errors: [payment.message || "فشل معالجة الدفع."],
         });
-        window.location.href = moyasarConfig.callback_url;
-      } else {
-        session.completePayment(ApplePaySession.STATUS_FAILURE);
         toast.add({
           severity: "error",
           summary: "خطأ",
-          detail: "فشل معالجة الدفع. حاول مرة أخرى.",
+          detail: payment.message || "فشل معالجة الدفع.",
           life: 3000,
         });
+        return;
       }
+
+      if (payment.status !== "paid") {
+        session.completePayment({
+          status: ApplePaySession.STATUS_FAILURE,
+          errors: [payment.source?.message || "فشل الدفع."],
+        });
+        toast.add({
+          severity: "error",
+          summary: "خطأ",
+          detail: payment.source?.message || "فشل معالجة الدفع.",
+          life: 3000,
+        });
+        return;
+      }
+
+      await savePaymentOnBackend(payment);
+      session.completePayment(ApplePaySession.STATUS_SUCCESS);
+      toast.add({
+        severity: "success",
+        summary: "نجاح",
+        detail: "تمت عملية الدفع بنجاح!",
+        life: 3000,
+      });
+      window.location.href = moyasarConfig.callback_url;
     } catch (error) {
       console.error("Error processing payment:", error);
-      session.completePayment(ApplePaySession.STATUS_FAILURE);
+      session.completePayment({
+        status: ApplePaySession.STATUS_FAILURE,
+        errors: [error.message || "فشل معالجة الدفع."],
+      });
       toast.add({
         severity: "error",
         summary: "خطأ",
@@ -664,7 +696,6 @@ const savePaymentOnBackend = async (payment) => {
     await request.post("/payments/checkout", {
       payment_id: payment.id,
       status: payment.status,
-
       amount: totalAmount.value / 100,
       currency: "SAR",
       description,
@@ -713,14 +744,13 @@ const submitPayment = async () => {
   }
 
   try {
-    // Create token by calling Moyasar's /tokens endpoint
     const tokenData = {
       name: cardDetails.name,
       number: cardDetails.number.replace(/\s/g, ""),
       month: cardDetails.month,
       year: cardDetails.year,
       cvc: cardDetails.cvc,
-      callback_url: window.location.origin + "/payment-callback",
+      callback_url: moyasarConfig.callback_url,
       publishable_api_key: moyasarConfig.publishable_api_key,
     };
 
@@ -745,10 +775,6 @@ const submitPayment = async () => {
       return;
     }
 
-    if (tokenResponse.verification_url) {
-      // window.location.href = tokenResponse.verification_url;
-    }
-    // Send token to backend for payment processing
     const description = `Donation: ${donationCases
       .map((item) => `${item.title} x${item.qty || 1}`)
       .join(", ")}${
@@ -765,7 +791,7 @@ const submitPayment = async () => {
       description,
       token: tokenResponse.id,
       source: {
-        type: checkout.paymentMethod, // e.g., "creditcard", "mada", "visa"
+        type: checkout.paymentMethod,
         token: tokenResponse.id,
       },
       tokenData,
@@ -780,7 +806,7 @@ const submitPayment = async () => {
     toast.add({
       severity: "error",
       summary: "خطأ",
-      detail: error,
+      detail: error.message || "فشل معالجة الدفع.",
       life: 3000,
     });
   }
@@ -800,15 +826,13 @@ onMounted(async () => {
       (method) => method.code !== "apple_pay"
     );
   }
-  // request.post("tokens/logout");
   await fetchUserData();
   await fetchPaymentMethods();
 });
 </script>
-
 <style scoped>
 .moyasar-form,
-.apple-form {
+.apple-pay-container {
   display: block;
   margin-top: 1rem;
 }
@@ -818,5 +842,14 @@ onMounted(async () => {
 .p-error {
   color: #ef4444;
   font-size: 0.875rem;
+}
+apple-pay-button {
+  --apple-pay-button-width: 100%;
+  --apple-pay-button-height: 40px;
+  --apple-pay-button-border-radius: 8px;
+  --apple-pay-button-padding: 0;
+  --apple-pay-button-box-sizing: border-box;
+  display: inline-block;
+  min-width: 150px;
 }
 </style>
