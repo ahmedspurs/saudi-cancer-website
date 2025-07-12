@@ -270,6 +270,7 @@ const changePage = (page) => {
   options.page = page;
   pagination.current_page = page;
   fetchCases();
+  window.scrollTo(0, 0);
 };
 
 // Pay Now button handler
