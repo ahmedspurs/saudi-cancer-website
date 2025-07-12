@@ -185,7 +185,6 @@ const login = async () => {
       });
     }
   } catch (error) {
-    console.error("Error during	login:", error);
     toast.add({
       severity: "error",
       summary: "خطأ",

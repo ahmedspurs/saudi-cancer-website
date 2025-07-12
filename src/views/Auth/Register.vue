@@ -227,7 +227,6 @@ const register = async () => {
       });
     }
   } catch (error) {
-    console.error("Error during registration:", error);
     toast.add({
       severity: "error",
       summary: "خطأ",

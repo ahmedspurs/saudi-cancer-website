@@ -34,7 +34,7 @@ const LoadingService = {
         component,
       };
     } catch (error) {
-      console.error("Failed to show loading component:", error);
+      console.error("Failed to show loading component:");
     }
   },
 
@@ -52,7 +52,7 @@ const LoadingService = {
         // Clear the instance
         loadingInstance = null;
       } catch (error) {
-        console.error("Failed to hide loading component:", error);
+        console.error("Failed to hide loading component:");
       }
     }
   },

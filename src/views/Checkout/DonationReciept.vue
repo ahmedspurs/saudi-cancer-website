@@ -171,7 +171,6 @@ const fetchReceipt = async () => {
       detail: error.value,
       life: 3000,
     });
-    console.error(err);
   } finally {
     loading.value = false;
   }
@@ -276,7 +275,6 @@ const saveAsPDF = async () => {
       life: 3000,
     });
   } catch (err) {
-    console.error("Error generating PDF:", err);
     toast.add({
       severity: "error",
       summary: "خطأ",

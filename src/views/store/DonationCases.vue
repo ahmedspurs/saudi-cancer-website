@@ -221,8 +221,6 @@ const visiblePages = computed(() => {
 const fetchCases = async () => {
   isLoading.value = true;
   try {
-    console.log({ type: route.params.type });
-
     const response = await request.post("cases/by-type", options);
     if (response.status) {
       projects.value = response.data.map((project) => ({
@@ -239,7 +237,6 @@ const fetchCases = async () => {
       pagination.last_page = 1;
     }
   } catch (error) {
-    console.error("Error fetching cases:", error);
     projects.value = [];
     pagination.total = 0;
     pagination.current_page = 1;

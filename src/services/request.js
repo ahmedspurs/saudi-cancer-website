@@ -3,7 +3,7 @@ import LoadingService from "./Loading";
 
 // Custom notification function (to be overridden by components)
 let notify = ({ type, title, message }) => {
-  console.log(`Notification: ${type} - ${title} - ${message}`);
+  console.log(`Notification:`);
 };
 
 const request = {

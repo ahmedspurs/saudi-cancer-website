@@ -29,7 +29,6 @@ const processQueue = (error, token = null) => {
 instance.interceptors.request.use(
   (config) => {
     const accessToken = localStorage.getItem("accessToken");
-    console.log("Access token:", accessToken);
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
     }
@@ -47,7 +46,6 @@ instance.interceptors.response.use(
         error.response?.data?.message || error.message || "Login failed";
       return Promise.reject({ ...error, message: errorMessage });
     }
-    console.log({ response });
     if (response.status == 401) {
       if (response?.status === 401 && !originalRequest._retry) {
         if (isRefreshing) {
@@ -65,9 +63,7 @@ instance.interceptors.response.use(
         isRefreshing = true;
 
         try {
-          console.log("Attempting to refresh token using HTTP-only cookie...");
           const response = await instance.post("tokens/refresh-token");
-          console.log("Refresh token response:", response.data);
 
           const newAccessToken =
             response.data.accessToken ||
@@ -90,10 +86,6 @@ instance.interceptors.response.use(
           originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
           return instance(originalRequest);
         } catch (refreshError) {
-          console.error(
-            "Refresh token error:",
-            refreshError.response?.data || refreshError.message
-          );
           processQueue(refreshError);
 
           localStorage.removeItem("accessToken");
@@ -123,7 +115,6 @@ instance.interceptors.response.use(
 
   async (error) => {
     const originalRequest = error.config;
-    console.log({ error: originalRequest.url });
 
     // Skip token refresh for /api/users/login
     if (originalRequest.url.includes("users/login")) {
@@ -148,9 +139,7 @@ instance.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        console.log("Attempting to refresh token using HTTP-only cookie...");
         const response = await instance.post("tokens/refresh-token");
-        console.log("Refresh token response:", response.data);
 
         const newAccessToken =
           response.data.accessToken ||
@@ -173,10 +162,6 @@ instance.interceptors.response.use(
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
         return instance(originalRequest);
       } catch (refreshError) {
-        console.error(
-          "Refresh token error:",
-          refreshError.response?.data || refreshError.message
-        );
         processQueue(refreshError);
 
         localStorage.removeItem("accessToken");

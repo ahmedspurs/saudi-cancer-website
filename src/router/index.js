@@ -85,11 +85,6 @@ router.beforeEach(async (to, from, next) => {
       return next(); // User is authenticated, proceed
     }
   } catch (error) {
-    console.error("Auth guard error:", {
-      message: error.message,
-      status: error.response?.status,
-    });
-
     if (error.response?.status === 401) {
       localStorage.removeItem("accessToken"); // Clear invalid token
       return next({

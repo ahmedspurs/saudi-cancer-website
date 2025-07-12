@@ -285,7 +285,6 @@ const fetchUser = async () => {
     });
   } catch (err) {
     error.value = "فشل في تحميل بيانات الملف الشخصي. حاول مرة أخرى.";
-    console.error(err);
   } finally {
     loading.value = false;
   }
@@ -328,8 +327,6 @@ const saveProfile = async () => {
     });
     return;
   }
-
-  console.log("id", user?.value.id);
 
   formState.value = true;
   try {

@@ -84,7 +84,6 @@ const fetchAccounts = async () => {
     accounts.value = response.data;
   } catch (err) {
     error.value = "فشل في تحميل الحسابات المصرفية. حاول مرة أخرى.";
-    console.error(err);
   } finally {
     loading.value = false;
   }

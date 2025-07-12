@@ -400,7 +400,6 @@ const fetchUserData = async () => {
       }
     }
   } catch (error) {
-    console.error("Error fetching user data:", error);
     toast.add({
       severity: "error",
       summary: "خطأ",
@@ -443,7 +442,6 @@ const fetchPaymentMethods = async () => {
       }
     }
   } catch (error) {
-    console.error("Error fetching payment methods:", error);
     toast.add({
       severity: "error",
       summary: "خطأ",
@@ -483,7 +481,6 @@ const saveGuestUserData = async () => {
     });
     return true;
   } catch (error) {
-    console.error("Error saving guest user data:", error);
     toast.add({
       severity: "error",
       summary: "خطأ",
@@ -569,7 +566,6 @@ const onApplePayButtonClicked = async () => {
       const merchantSession = await response.json();
       session.completeMerchantValidation(merchantSession);
     } catch (error) {
-      console.error("Error validating merchant:", error);
       session.abort();
       toast.add({
         severity: "error",
@@ -655,7 +651,6 @@ const onApplePayButtonClicked = async () => {
       });
       window.location.href = moyasarConfig.callback_url + `?id=${payment.id}`;
     } catch (error) {
-      console.error("Error processing payment:", error);
       session.completePayment({
         status: ApplePaySession.STATUS_FAILURE,
         errors: [error.message || "فشل معالجة الدفع."],
@@ -706,7 +701,6 @@ const savePaymentOnBackend = async (payment) => {
         : { name: checkout.name || "Guest", phone: checkout.phone },
     });
   } catch (error) {
-    console.error("Error saving payment details:", error);
     toast.add({
       severity: "error",
       summary: "خطأ",
@@ -804,7 +798,6 @@ const submitPayment = async () => {
       window.location.href = payment.transaction_url; // Redirect for 3D Secure
     }
   } catch (error) {
-    console.error("Error processing payment:", error);
     toast.add({
       severity: "error",
       summary: "خطأ",

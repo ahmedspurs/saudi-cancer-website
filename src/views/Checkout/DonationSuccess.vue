@@ -139,13 +139,11 @@ const verifyPayment = async () => {
     const response = await request.get(
       `/payments/verify?paymentId=${route.query.id}`
     );
-    console.log(response.payment_status);
 
     if (response.status) {
       if (response.payment_status == "pending") {
         paymentStatus.value = "pending";
         paymentId.value = route.query.id;
-        console.log("penging state");
 
         startPolling();
       } else if (response.payment_status == "success") {
@@ -182,7 +180,6 @@ const startPolling = () => {
       const response = await request.get(
         `/payments/verify?paymentId=${route.query.id}`
       );
-      console.log(response.payment_status, response.status);
       paymentStatus.value = response.payment_status;
 
       if (response.status) {
@@ -227,7 +224,6 @@ const cancelPayment = async () => {
       life: 3000,
     });
   } catch (error) {
-    console.error("Error cancelling payment:", error);
     toast.add({
       severity: "error",
       summary: "خطأ",
@@ -248,7 +244,6 @@ const viewReceipt = async () => {
       query: { paymentId: paymentId.value },
     });
   } catch (error) {
-    console.error("Error fetching receipt:", error);
     toast.add({
       severity: "error",
       summary: "خطأ",
@@ -275,7 +270,6 @@ const submitRating = async (value) => {
       life: 3000,
     });
   } catch (error) {
-    console.error("Error submitting rating:", error);
     toast.add({
       severity: "error",
       summary: "خطأ",

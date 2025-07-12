@@ -184,7 +184,6 @@ const donateNow = async () => {
     });
     router.push("/checkout");
   } catch (error) {
-    console.error("Error adding to cart:", error);
     toast.add({
       severity: "error",
       summary: "خطأ",
@@ -240,7 +239,6 @@ const addToCart = () => {
       amount: "",
     });
   } catch (error) {
-    console.error("Error adding to cart:", error);
     toast.add({
       severity: "error",
       summary: "خطأ",
