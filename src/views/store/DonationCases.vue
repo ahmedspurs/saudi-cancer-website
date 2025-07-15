@@ -53,8 +53,9 @@
       >
         <!-- صورة المشروع -->
         <div
-          class="w-full h-40 flex-col-center bg-white rounded-md overflow-hidden relative"
+          class="w-full flex flex-col items-center bg-white rounded-2xl shadow-md overflow-hidden relative"
         >
+          <!-- صورة المشروع -->
           <Image
             :src="
               project?.image_url
@@ -63,74 +64,148 @@
                   }`
                 : placeholder
             "
-            imageClass="w-full h-full object-cover"
+            imageClass="w-full h-56 object-cover transition-all duration-500"
             preview
-            alt="صورة الحساب"
-            class="w-full h-full !object-cover !object-center"
+            alt="صورة المشروع"
+            class="w-full h-56 object-contain object-center"
           />
-          <!-- Green Overlay for Completed Status -->
+
+          <!-- غطاء أخضر عند الاكتمال -->
           <div
             v-if="project?.progress >= 100 || project.status == 'completed'"
-            class="absolute inset-0 bg-green-100 bg-opacity-70 flex items-center justify-center flex-col"
+            class="absolute inset-0 bg-green-500/10 flex items-center justify-center"
           >
-            <i class="pi pi-check-circle text-green-600 text-3xl"></i>
-            <span class="text-green-600 font-semibold">تم الاكتمال بنجاح</span>
+            <Image
+              src="/images/donation_complete.webp"
+              class="w-32 h-32 object-contain"
+            />
+          </div>
+
+          <!-- Progress Bar -->
+          <div class="w-full px-4 py-3">
+            <div
+              v-if="project?.progress < 100 && project.status != 'completed'"
+              class="w-full bg-purple-300 rounded-full h-5 relative overflow-hidden"
+            >
+              <div
+                :style="`width: ${project.progress}%`"
+                class="absolute top-0 right-0 h-full bg-gradient-to-r from-blue-500 to-blue-700 text-white text-xs font-bold flex items-center justify-center rounded-full transition-all duration-700 ease-in-out"
+              >
+                <span class="ms-12 relative z-40">
+                  {{ project.progress }}%
+                </span>
+              </div>
+            </div>
+
+            <!-- تم الاكتمال -->
+            <div
+              v-else
+              class="w-full bg-green-600 text-white text-xs font-bold text-center py-1 rounded-full transition-all duration-500"
+            >
+              تم إكمال التبرع بنجاح
+            </div>
           </div>
         </div>
 
-        <!-- Progress Bar -->
-        <div
-          v-if="project?.progress < 100 && project.status != 'completed'"
-          :style="`width: ${project.progress}%`"
-          class="text-xs -mt-3 mb-6 z-40 font-semibold bg-white text-black p-1 rounded-3xl"
-        >
-          {{ project.progress }}%
-        </div>
-        <div
-          v-if="project?.progress >= 100 || project.status == 'completed'"
-          :style="`width: 100%`"
-          class="text-xs -mt-3 mb-6 z-40 font-semibold bg-green-600 text-white p-1 rounded-3xl"
-        >
-          تم اكمال التبرع بنجاح
+        <div class="">
+          <div class="w-full grid-2 gap-4 text-right mt-4">
+            <!-- Project Title -->
+            <p class="text-sm">{{ project.title }}</p>
+
+            <!-- Target Amount -->
+            <div class="text-center">
+              <p class="text-xs text-white/90 mt-1">المبلغ المطلوب:</p>
+              <p class="font-semibold text-white/90 mt-1">
+                {{ project.target_amount.toLocaleString() }}
+              </p>
+            </div>
+          </div>
+
+          <!-- إدخال مبلغ (only if not completed) -->
+          <InputText
+            v-if="project?.progress < 100 && project.status != 'completed'"
+            v-model.number="project.amount"
+            type="number"
+            placeholder="مبلغ التبرع"
+            class="mt-3 w-full text-sm text-right"
+          />
+
+          <!-- الأزرار (only if not completed) -->
+          <div
+            v-if="project?.progress < 100 && project.status != 'completed'"
+            class="flex justify-between gap-2 mt-4 w-full"
+          >
+            <Button
+              label="الدفع الآن"
+              severity="secondary"
+              class="flex-1"
+              @click="payNow(project)"
+            />
+            <Button
+              label="أضف للسلة"
+              severity="secondary"
+              class="flex-1"
+              @click="addToCart(project)"
+            />
+          </div>
         </div>
 
-        <!-- التفاصيل -->
-        <div class="w-full grid-2 gap-4 text-right">
-          <p class="text-sm">{{ project.title }}</p>
-          <div class="text-center">
-            <p class="text-xs text-white/90 mt-1">المبلغ المطلوب:</p>
-            <p class="font-semibold text-white/90 mt-1">
-              {{ project.target_amount.toLocaleString() }}
+        <!-- Social Media Sharing and Copy URL -->
+        <div class="flex justify-between items-center gap-2 mt-4">
+          <!-- Case Number with Copy Button -->
+          <div class="flex items-center gap-2">
+            <p class="font-semi-bold text-white/90">
+              رقم الحالة: #00{{ project.id }}
             </p>
           </div>
-        </div>
-
-        <!-- إدخال مبلغ (only if not completed) -->
-        <InputText
-          v-if="project?.progress < 100 && project.status != 'completed'"
-          v-model.number="project.amount"
-          type="number"
-          placeholder="مبلغ التبرع"
-          class="mt-3 w-full text-sm text-right"
-        />
-
-        <!-- الأزرار (only if not completed) -->
-        <div
-          v-if="project?.progress < 100 && project.status != 'completed'"
-          class="flex justify-between gap-2 mt-4 w-full"
-        >
-          <Button
-            label="الدفع الآن"
-            severity="secondary"
-            class="flex-1"
-            @click="payNow(project)"
-          />
-          <Button
-            label="أضف للسلة"
-            severity="secondary"
-            class="flex-1"
-            @click="addToCart(project)"
-          />
+          <div class="">
+            <div class="flex gap-2 items-center">
+              <!-- Facebook -->
+              <a
+                href="https://www.facebook.com/sharer/sharer.php?u={{ encodeURIComponent(project.url) }}"
+                target="_blank"
+                class="text-white hover:text-white"
+                title="مشاركة على فيسبوك"
+              >
+                <i class="fab fa-facebook-f w-5 h-5"></i>
+              </a>
+              <!-- Twitter/X -->
+              <a
+                href="https://twitter.com/intent/tweet?text={{ encodeURIComponent('تبرع الآن لمشروع: ' + project.title + ' | رقم الحالة: ' + project.case_number + ' | المبلغ المطلوب: ' + project.target_amount.toLocaleString()) }}&url={{ encodeURIComponent(project.url) }}"
+                target="_blank"
+                class="text-white hover:text-white"
+                title="مشاركة على تويتر"
+              >
+                <i class="fab fa-x-twitter w-5 h-5"></i>
+              </a>
+              <!-- LinkedIn -->
+              <a
+                href="https://www.linkedin.com/sharing/share-offsite/?url={{ encodeURIComponent(project.url) }}"
+                target="_blank"
+                class="text-white hover:text-white"
+                title="مشاركة على لينكدإن"
+              >
+                <i class="fab fa-linkedin-in w-5 h-5"></i>
+              </a>
+              <!-- Snapchat -->
+              <a
+                href="https://www.snapchat.com/share?url={{ encodeURIComponent(project.url) }}&text={{ encodeURIComponent('تبرع الآن لمشروع: ' + project.title) }}"
+                target="_blank"
+                class="text-white hover:text-white"
+                title="مشاركة على سناب شات"
+              >
+                <i class="fab fa-snapchat-ghost w-5 h-5"></i>
+              </a>
+              <!-- Copy Donation Case URL -->
+              <!-- <button
+                @click="copyCaseUrl(project.id)"
+                class="text-white hover:text-white"
+                title="نسخ رابط الحالة"
+              >
+                <i class="fas fa-link w-5 h-5"></i>
+              </button> -->
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -216,7 +291,21 @@ const visiblePages = computed(() => {
   }
   return pages;
 });
-
+function copyCaseUrl(url) {
+  navigator.clipboard
+    .writeText(url)
+    .then(() => {
+      toast.add({
+        severity: "success",
+        summary: "نجاح",
+        detail: `تم نسخ رابط الحالة بنجاح`,
+        life: 3000,
+      });
+    })
+    .catch(() => {
+      alert("فشل في نسخ رابط الحالة، حاول مرة أخرى.");
+    });
+}
 // Fetch cases from the API
 const fetchCases = async () => {
   isLoading.value = true;

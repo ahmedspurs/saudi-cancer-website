@@ -188,6 +188,7 @@ const startPolling = () => {
           paymentId.value = route.query.id;
           clearInterval(pollingInterval.value);
           isLoading.value = false;
+          localStorage.removeItem("cart");
         } else if (response.payment_status == "failed") {
           paymentStatus.value = "failed";
           errorMessage.value = response.msg || errorMessage.value;
