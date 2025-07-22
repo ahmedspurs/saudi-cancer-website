@@ -3,7 +3,7 @@ import axios from "axios";
 
 // Create axios instance
 const instance = axios.create({
-  baseURL: "https://api.ratlclinic.com/api/",
+  baseURL: "https://api.scf.org.sa/api/",
   // baseURL: "http://localhost:3030/api/",
   timeout: 60000,
   withCredentials: true,

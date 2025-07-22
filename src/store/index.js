@@ -6,7 +6,7 @@ const store = createStore({
   state() {
     return {
       // baseUrl: "http://localhost:3030/",
-      baseUrl: "https://api.ratlclinic.com/",
+      baseUrl: "https://api.scf.org.sa/",
     };
   },
 });
