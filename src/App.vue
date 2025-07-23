@@ -79,6 +79,9 @@ export default {
 
 <style>
 /* page transition  */
+body {
+  overflow: visible !important;
+}
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.6s ease, transform 0.6s ease;

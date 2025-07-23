@@ -111,7 +111,7 @@
           <div class="w-full grid-2 gap-4 text-right mt-4">
             <!-- Project Title with Link -->
             <router-link
-              :to="`/case/${project.id}`"
+              :to="`/donation-cases-details/${project.id}`"
               class="text-sm hover:underline"
             >
               {{ project.title }}

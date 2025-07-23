@@ -1,7 +1,6 @@
 <template>
   <div
     class="container mx-auto p-4 sm:p-6 bg-white dark:bg-gray-800 transition-colors duration-300"
-    dir="rtl"
   >
     <Toast position="top-right" />
 
