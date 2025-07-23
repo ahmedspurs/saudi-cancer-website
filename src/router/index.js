@@ -20,6 +20,7 @@ import axios from "axios"; // Adjust based on your setup
 import BankAccounts from "../views/Store/BankAccounts.vue";
 import Profile from "../views/Auth/Profile.vue";
 import DonationReciept from "../views/Checkout/DonationReciept.vue";
+import CaseDetails from "../views/store/CaseDetails.vue";
 const routes = [
   {
     path: "/",
@@ -38,6 +39,11 @@ const routes = [
   { path: "/gift-donation", component: GiftDonation },
   { path: "/bank-accounts", component: BankAccounts },
   { path: "/donation-reciept", component: DonationReciept, props: true },
+  {
+    path: "/donation-cases-details/:id",
+    component: CaseDetails,
+    props: true, // Pass route params as props to the component
+  },
   {
     path: "/donation-cases/:type",
     name: "DonationCases",

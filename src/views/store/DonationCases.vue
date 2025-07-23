@@ -37,8 +37,6 @@
       />
     </div>
 
-    <!-- Loading State -->
-
     <!-- No Results Message -->
     <div v-if="projects.length === 0">
       <NoData />
@@ -56,19 +54,21 @@
           class="w-full flex flex-col items-center bg-white rounded-2xl shadow-md overflow-hidden relative"
         >
           <!-- صورة المشروع -->
-          <Image
-            :src="
-              project?.image_url
-                ? `${$store?.state?.baseUrl}${
-                    project?.image_url?.split('public/')[1]
-                  }`
-                : placeholder
-            "
-            imageClass="w-full h-56 object-cover transition-all duration-500"
-            preview
-            alt="صورة المشروع"
-            class="w-full h-56 object-contain object-center"
-          />
+          <router-link :to="`/donation-cases-details/${project.id}`">
+            <Image
+              :src="
+                project?.image_url
+                  ? `${$store?.state?.baseUrl}${
+                      project?.image_url?.split('public/')[1]
+                    }`
+                  : placeholder
+              "
+              imageClass="w-full h-56 object-cover transition-all duration-500"
+              preview
+              alt="صورة المشروع"
+              class="w-full h-56 object-contain object-center"
+            />
+          </router-link>
 
           <!-- غطاء أخضر عند الاكتمال -->
           <div
@@ -109,8 +109,13 @@
 
         <div class="">
           <div class="w-full grid-2 gap-4 text-right mt-4">
-            <!-- Project Title -->
-            <p class="text-sm">{{ project.title }}</p>
+            <!-- Project Title with Link -->
+            <router-link
+              :to="`/case/${project.id}`"
+              class="text-sm hover:underline"
+            >
+              {{ project.title }}
+            </router-link>
 
             <!-- Target Amount -->
             <div class="text-center">
@@ -157,12 +162,21 @@
             <p class="font-semi-bold text-white/90">
               رقم الحالة: #00{{ project.id }}
             </p>
+            <button
+              @click="copyCaseUrl(getProjectUrl(project.id))"
+              class="text-white hover:text-white"
+              title="نسخ رابط الحالة"
+            >
+              <i class="fas fa-link w-5 h-5"></i>
+            </button>
           </div>
           <div class="">
             <div class="flex gap-2 items-center">
               <!-- Facebook -->
               <a
-                href="https://www.facebook.com/sharer/sharer.php?u={{ encodeURIComponent(project.url) }}"
+                :href="`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+                  getProjectUrl(project.id)
+                )}`"
                 target="_blank"
                 class="text-white hover:text-white"
                 title="مشاركة على فيسبوك"
@@ -171,7 +185,14 @@
               </a>
               <!-- Twitter/X -->
               <a
-                href="https://twitter.com/intent/tweet?text={{ encodeURIComponent('تبرع الآن لمشروع: ' + project.title + ' | رقم الحالة: ' + project.case_number + ' | المبلغ المطلوب: ' + project.target_amount.toLocaleString()) }}&url={{ encodeURIComponent(project.url) }}"
+                :href="`https://twitter.com/intent/tweet?text=${encodeURIComponent(
+                  'تبرع الآن لمشروع: ' +
+                    project.title +
+                    ' | رقم الحالة: #00' +
+                    project.id +
+                    ' | المبلغ المطلوب: ' +
+                    project.target_amount.toLocaleString()
+                )}&url=${encodeURIComponent(getProjectUrl(project.id))}`"
                 target="_blank"
                 class="text-white hover:text-white"
                 title="مشاركة على تويتر"
@@ -180,7 +201,9 @@
               </a>
               <!-- LinkedIn -->
               <a
-                href="https://www.linkedin.com/sharing/share-offsite/?url={{ encodeURIComponent(project.url) }}"
+                :href="`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
+                  getProjectUrl(project.id)
+                )}`"
                 target="_blank"
                 class="text-white hover:text-white"
                 title="مشاركة على لينكدإن"
@@ -189,21 +212,17 @@
               </a>
               <!-- Snapchat -->
               <a
-                href="https://www.snapchat.com/share?url={{ encodeURIComponent(project.url) }}&text={{ encodeURIComponent('تبرع الآن لمشروع: ' + project.title) }}"
+                :href="`https://www.snapchat.com/share?url=${encodeURIComponent(
+                  getProjectUrl(project.id)
+                )}&text=${encodeURIComponent(
+                  'تبرع الآن لمشروع: ' + project.title
+                )}`"
                 target="_blank"
                 class="text-white hover:text-white"
                 title="مشاركة على سناب شات"
               >
                 <i class="fab fa-snapchat-ghost w-5 h-5"></i>
               </a>
-              <!-- Copy Donation Case URL -->
-              <!-- <button
-                @click="copyCaseUrl(project.id)"
-                class="text-white hover:text-white"
-                title="نسخ رابط الحالة"
-              >
-                <i class="fas fa-link w-5 h-5"></i>
-              </button> -->
             </div>
           </div>
         </div>
@@ -234,7 +253,6 @@
     <ValiditySection class="my-12" />
   </div>
 </template>
-
 <script setup>
 import { reactive, ref, computed, onMounted, watch } from "vue";
 import { useToast } from "primevue/usetoast";
@@ -335,6 +353,10 @@ const fetchCases = async () => {
   }
 };
 
+// Function to generate project details page URL
+const getProjectUrl = (projectId) => {
+  return `${window.location.origin}/donation-cases-details/${projectId}`;
+};
 // Debounced search
 const debouncedSearch = debounce(() => {
   options.page = 1;
