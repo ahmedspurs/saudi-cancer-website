@@ -30,12 +30,21 @@
           <p class="text-gray-600 mt-2">
             رقم الهاتف: {{ user.phone || "غير متوفر" }}
           </p>
-          <Button
-            label="تعديل الملف الشخصي"
-            icon="pi pi-pencil"
-            class="mt-4 bg-purple-600 hover:bg-purple-700 transition-colors duration-200"
-            @click="openEditDialog"
-          />
+          <div class="flex items-center mt-4">
+            <Button
+              label="تعديل الملف الشخصي"
+              icon="pi pi-pencil"
+              class="bg-purple-600 me-4 hover:bg-purple-700 transition-colors duration-200"
+              @click="openEditDialog"
+            />
+
+            <Button
+              label="تسجيل الخروج"
+              icon="pi pi-sign-out"
+              severity="danger"
+              @click="logout"
+            />
+          </div>
         </div>
 
         <!-- Tabs for Donations and Payments -->
@@ -128,7 +137,7 @@
                     <strong>التاريخ:</strong>
                     {{ formatDate(payment.createdAt) }}
                   </p>
-                  <p v-if="payment.payment_id">
+                  <p v-if="payment.payment_status == 'success'">
                     <router-link
                       :to="`/donation-reciept?payment_id=${payment.payment_id}`"
                       target="_blank"
@@ -248,7 +257,9 @@ import ProgressSpinner from "primevue/progressspinner";
 import TabView from "primevue/tabview";
 import TabPanel from "primevue/tabpanel";
 import request from "../../services/request"; // Your custom request service
+import { useRouter } from "vue-router";
 
+const router = useRouter();
 const toast = useToast();
 const user = ref(null);
 const loading = ref(false);
@@ -358,6 +369,18 @@ const formatDate = (dateString) => {
     month: "long",
     day: "numeric",
   });
+};
+
+const logout = async () => {
+  await request.post("tokens/logout");
+  localStorage.removeItem("accessToken");
+  toast.add({
+    severity: "success",
+    summary: "نجاح",
+    detail: "تم تسجيل الخروج بنجاح!",
+    life: 3000,
+  });
+  router.push("/");
 };
 
 onMounted(() => {

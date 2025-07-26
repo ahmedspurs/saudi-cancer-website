@@ -3,7 +3,7 @@
     <div class="grid-3 bg-secondary gap-8">
       <div class="h-[400px] rounded-tl-[70%] overflow-hidden">
         <img
-          src="/images/home-banner.jpeg"
+          src="/images/main-logo.png"
           class="w-full h-full object-cover"
           alt=""
         />

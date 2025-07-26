@@ -306,8 +306,9 @@ const isCardFormValid = computed(() => {
 
 // Saudi phone number validation function
 const validatePhone = () => {
-  const saudiPhoneRegex = /^(?:\+9665|05)\d{8}$/;
-  phoneValid.value = saudiPhoneRegex.test(checkout.phone);
+  const rawPhone = checkout.phone.trim().replace(/[\s\-]/g, ""); // حذف المسافات والشرط
+  const saudiPhoneRegex = /^(?:\+966|00966|966|0)?5\d{8}$/;
+  phoneValid.value = saudiPhoneRegex.test(rawPhone);
 };
 
 // Format card number (add spaces every 4 digits)

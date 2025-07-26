@@ -14,7 +14,7 @@
         <div
           class="bg-gray-100 h-60 rounded-t-lg flex items-end justify-end"
           style="
-            background-image: url(/images/home-banner.jpeg);
+            background-image: url(/images/main-logo.png);
             background-size: cover;
           "
         >

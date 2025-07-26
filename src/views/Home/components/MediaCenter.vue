@@ -5,7 +5,7 @@
       <div class="p-4 rounded-xl bg-white">
         <div class="h-[200px] w-full overflow-hidden rounded-lg">
           <img
-            src="/images/home-banner.jpeg"
+            src="/images/main-logo.png"
             class="w-full h-full object-cover"
             alt=""
           />
@@ -22,7 +22,7 @@
         >
           <div class="h-[100px] md:w-1/2 w-full overflow-hidden rounded-lg">
             <img
-              src="/images/home-banner.jpeg"
+              src="/images/main-logo.png"
               class="w-full h-full object-cover"
               alt=""
             />

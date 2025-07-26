@@ -222,7 +222,6 @@ const fetchUserData = async () => {
       isLoadingUser.value = false;
     }
   } catch (error) {
-    console.error("Error fetching user data:", error);
     toast.add({
       severity: "error",
       summary: "خطأ",

@@ -11,11 +11,13 @@
           <i class="fa-solid fa-bars text-xl"></i>
         </button>
         <div class="h-[90px] justify-self-center">
-          <img
-            src="/images/main-logo.png"
-            class="w-full h-full object-contain object-right"
-            alt="Logo"
-          />
+          <router-link to="/">
+            <img
+              src="/images/main-logo.png"
+              class="w-full h-full object-contain object-right"
+              alt="Logo"
+            />
+          </router-link>
         </div>
         <div class="relative justify-self-end flex items-center gap-4">
           <router-link to="/profile" class="relative">
@@ -49,14 +51,23 @@
           />
         </div>
         <nav class="flex items-center font-semibold text-primary">
-          <router-link
-            v-for="link in mainNavLinks"
-            :key="link.text"
-            :to="link.to"
-            class="me-4 text-secondary hover:text-purple-700 transition-colors"
-          >
-            {{ link.text }}
-          </router-link>
+          <span v-for="link in mainNavLinks" :key="link.text">
+            <router-link
+              :to="link?.to"
+              v-if="!link?.external"
+              class="me-4 text-secondary hover:text-purple-700 transition-colors"
+            >
+              {{ link?.text }}
+            </router-link>
+            <a
+              :href="link?.to"
+              target="_blank"
+              v-else
+              class="me-4 text-secondary hover:text-purple-700 transition-colors"
+            >
+              {{ link?.text }}
+            </a>
+          </span>
         </nav>
         <div class="relative flex items-center gap-4">
           <router-link to="/profile" class="relative">
@@ -83,25 +94,18 @@
     <div class="bg-secondary w-[80%] mx-auto rounded-2xl hidden md:block py-4">
       <div class="container flex justify-between">
         <nav class="flex items-center font-semibold text-white">
-          <router-link
-            v-for="link in secondaryNavLinks"
-            :key="link.text"
-            :to="link.to"
-            class="me-6 !text-white hover:text-purple-700 flex items-center transition-colors"
-          >
-            <i :class="link.icon" class="me-2"></i>
-            {{ link.text }}
-          </router-link>
+          <span v-for="link in secondaryNavLinks" :key="link.text">
+            <router-link
+              :to="link.to"
+              class="me-6 !text-white hover:text-purple-700 flex items-center transition-colors"
+            >
+              <i :class="link.icon" class="me-2"></i>
+              {{ link.text }}
+            </router-link>
+          </span>
         </nav>
         <div class="flex items-center gap-3">
-          <a
-            v-for="social in socialLinks"
-            :key="social.icon"
-            :href="social.url"
-            class="text-white hover:text-purple-700 transition-colors"
-          >
-            <i :class="social.icon" class="text-xl"></i>
-          </a>
+          <SocialMedia color="white" />
         </div>
       </div>
     </div>
@@ -158,14 +162,7 @@
         </div>
         <div class="p-4 border-t border-purple-500">
           <div class="flex justify-center gap-4">
-            <a
-              v-for="social in socialLinks"
-              :key="social.icon"
-              :href="social.url"
-              class="text-white hover:text-purple-300 transition-colors"
-            >
-              <i :class="social.icon" class="text-xl"></i>
-            </a>
+            <SocialMedia color="white" />
           </div>
           <router-link
             to="/profile"
@@ -184,6 +181,7 @@
 <script setup>
 import Drawer from "primevue/drawer";
 import { ref } from "vue";
+import SocialMedia from "../SocialMedia.vue";
 
 const drawerVisible = ref(false);
 const count = ref(0);
@@ -191,6 +189,7 @@ const user = JSON.parse(localStorage.getItem("user_data") || "{}");
 
 const mainNavLinks = [
   { text: "الرئيسية", to: "/" },
+  { text: "موقع المنظمة", to: "https://scf.org.sa", external: true },
   { text: "الحسابات البنكية", to: "/bank-accounts" },
   { text: "تواصل معنا", to: "/contact" },
 ];

@@ -41,13 +41,13 @@ instance.interceptors.response.use(
   async (response) => {
     const originalRequest = response.config;
     // Skip token refresh for /api/users/login
-    if (originalRequest.url.includes("users/login")) {
-      const errorMessage =
-        error.response?.data?.message || error.message || "Login failed";
-      return Promise.reject({ ...error, message: errorMessage });
-    }
+
     if (response.status == 401) {
       if (response?.status === 401 && !originalRequest._retry) {
+        if (originalRequest.url.includes("users/login")) {
+          const errorMessage = response?.data?.message || "Login failed";
+          return Promise.reject({ ...response, message: errorMessage });
+        }
         if (isRefreshing) {
           return new Promise((resolve, reject) => {
             failedQueue.push({ resolve, reject });

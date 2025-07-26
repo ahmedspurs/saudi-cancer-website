@@ -25,7 +25,7 @@ import { ref } from "vue";
 const slides = [
   { image: "/images/ceo.png", alt: "Slide 1" },
   { image: "/images/services.jpeg", alt: "Slide 1" },
-  { image: "/images/home-banner.jpeg", alt: "Slide 1" },
+  { image: "/images/main-logo.png", alt: "Slide 1" },
   { image: "/images/main-logo.png", alt: "Slide 1" },
   { image: "/images/services.jpeg", alt: "Slide 1" },
   { image: "/images/services.jpeg", alt: "Slide 1" },

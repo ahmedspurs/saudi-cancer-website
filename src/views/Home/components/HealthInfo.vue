@@ -31,7 +31,7 @@
         <div v-for="item in 3" class="flex items-center mb-4">
           <div class="h-[150px] overflow-hidden rounded-lg">
             <img
-              src="/images/home-banner.jpeg"
+              src="/images/main-logo.png"
               class="w-full h-full object-cover"
               alt=""
             />

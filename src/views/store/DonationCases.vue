@@ -383,11 +383,11 @@ const changePage = (page) => {
 
 // Pay Now button handler
 const payNow = (project) => {
-  if (!project.amount || project.amount <= 0) {
+  if (!project.amount || project.amount <= 0 || /[٠-٩]/.test(project.amount)) {
     toast.add({
       severity: "error",
       summary: "خطأ",
-      detail: "يرجى إدخال مبلغ تبرع صالح",
+      detail: "يرجى إدخال مبلغ تبرع صالح بالأرقام الإنجليزية فقط",
       life: 3000,
     });
     return;
@@ -419,11 +419,11 @@ const addToCart = (project) => {
   const cart = JSON.parse(
     localStorage.getItem("cart") || '{"gifts":[],"donations":[]}'
   );
-  if (!project.amount || project.amount <= 0) {
+  if (!project.amount || project.amount <= 0 || /[٠-٩]/.test(project.amount)) {
     toast.add({
       severity: "error",
       summary: "خطأ",
-      detail: "يرجى إدخال مبلغ تبرع صالح",
+      detail: "يرجى إدخال مبلغ تبرع صالح بالأرقام الإنجليزية فقط",
       life: 3000,
     });
     return;
