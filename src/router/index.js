@@ -21,6 +21,7 @@ import BankAccounts from "../views/Store/BankAccounts.vue";
 import Profile from "../views/Auth/Profile.vue";
 import DonationReciept from "../views/Checkout/DonationReciept.vue";
 import CaseDetails from "../views/store/CaseDetails.vue";
+import CaseDetailsOld from "../views/store/CaseDetailsOld.vue";
 const routes = [
   {
     path: "/",
@@ -42,6 +43,12 @@ const routes = [
   {
     path: "/donation-cases-details/:id",
     component: CaseDetails,
+    props: true, // Pass route params as props to the component
+  },
+
+  {
+    path: "/p/:id",
+    component: CaseDetailsOld,
     props: true, // Pass route params as props to the component
   },
   {
