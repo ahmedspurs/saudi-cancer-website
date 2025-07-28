@@ -81,8 +81,15 @@
             رقم الحالة: #00{{ project.id }}
           </p>
           <p class="text-base text-gray-700 dark:text-gray-300">
-            المبلغ المطلوب: {{ project.target_amount.toLocaleString() }} ريال
+            المبلغ المطلوب: {{ project.target_amount.toLocaleString() }}
+            <span class="icon-saudi_riyal text-lg"></span>
           </p>
+
+          <p class="text-base text-gray-700 dark:text-gray-300">
+            تم جمع {{ project.total_donations.toLocaleString() }}
+            <span class="icon-saudi_riyal text-lg"></span>
+          </p>
+
           <p class="text-base text-gray-700 dark:text-gray-300 line-clamp-4">
             {{ project.title || "وصف الحالة غير متوفر" }}
           </p>

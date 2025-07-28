@@ -68,11 +68,9 @@
             >
               <span>{{ item.title }} (الكمية: {{ item.qty || 1 }})</span>
               <span
-                >{{
-                  (item.amount * (item.qty || 1)).toLocaleString()
-                }}
-                ريال</span
-              >
+                >{{ (item.amount * (item.qty || 1)).toLocaleString() }}
+                <span class="icon-saudi_riyal text-lg"></span>
+              </span>
             </div>
             <div
               v-for="(gift, index) in donationGifts"
@@ -80,12 +78,18 @@
               class="flex justify-between"
             >
               <span>هدية لـ {{ gift.receiver_name }}</span>
-              <span>{{ gift.amount.toLocaleString() }} ريال</span>
+              <span
+                >{{ gift.amount.toLocaleString() }}
+                <span class="icon-saudi_riyal text-lg"></span>
+              </span>
             </div>
             <hr class="my-2" />
             <div class="flex justify-between font-bold text-gray-800">
               <span>المجموع الكلي:</span>
-              <span>{{ totalAmountMajor.toLocaleString() }} ريال</span>
+              <span
+                >{{ totalAmountMajor.toLocaleString() }}
+                <span class="icon-saudi_riyal text-lg"></span>
+              </span>
             </div>
           </div>
 

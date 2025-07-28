@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@chenfengyuan/vue-countdown": "^2.1.2",
+    "@emran-alhaddad/saudi-riyal-font": "^1.0.3",
     "@primeuix/themes": "^1.1.1",
     "@primevue/themes": "^4.2.2",
     "aos-vue": "^0.0.5",

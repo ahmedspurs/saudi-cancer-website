@@ -22,6 +22,7 @@ import VueTelInput from "vue-tel-input";
 import "vue-tel-input/vue-tel-input.css";
 import AosVue from "aos-vue";
 import App from "./App.vue";
+import "@emran-alhaddad/saudi-riyal-font/index.css";
 
 const globalOptions = {
   mode: "auto",

@@ -108,20 +108,32 @@
         </div>
 
         <div class="">
-          <div class="w-full grid-2 gap-4 text-right mt-4">
+          <div
+            class="w-full grid grid-cols-2 gap-4 mt-4 text-right rounded-lg shadow-sm"
+          >
             <!-- Project Title with Link -->
             <router-link
               :to="`/donation-cases-details/${project.id}`"
-              class="text-sm hover:underline"
+              class="text-sm font-medium text-white hover:underline col-span-full"
             >
               {{ project.title }}
             </router-link>
 
             <!-- Target Amount -->
-            <div class="text-center">
-              <p class="text-xs text-white/90 mt-1">المبلغ المطلوب:</p>
-              <p class="font-semibold text-white/90 mt-1">
+            <div class="text-center md:text-right">
+              <p class="text-xs text-white/80">المبلغ المطلوب</p>
+              <p class="text-base font-semibold text-white mt-1">
                 {{ project.target_amount.toLocaleString() }}
+                <span class="icon-saudi_riyal text-lg"></span>
+              </p>
+            </div>
+
+            <!-- Collected Amount -->
+            <div class="text-center md:text-right">
+              <p class="text-xs text-white/80">تم جمع</p>
+              <p class="text-base font-semibold text-white mt-1">
+                {{ project.total_donations.toLocaleString() }}
+                <span class="icon-saudi_riyal text-lg"></span>
               </p>
             </div>
           </div>

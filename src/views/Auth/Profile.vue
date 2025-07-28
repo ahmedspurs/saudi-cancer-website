@@ -64,7 +64,10 @@
                   :key="donation.id"
                   class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200"
                 >
-                  <p><strong>المبلغ:</strong> {{ donation.amount }} ريال</p>
+                  <p>
+                    <strong>المبلغ:</strong> {{ donation.amount }}
+                    <span class="icon-saudi_riyal text-lg"></span>
+                  </p>
                   <p>
                     <strong>الحالة:</strong>
                     <span
@@ -114,7 +117,10 @@
                   :key="payment.id"
                   class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200"
                 >
-                  <p><strong>المبلغ:</strong> {{ payment.amount }} ريال</p>
+                  <p>
+                    <strong>المبلغ:</strong> {{ payment.amount }}
+                    <span class="icon-saudi_riyal text-lg"></span>
+                  </p>
                   <p>
                     <strong>الحالة:</strong>
                     <span

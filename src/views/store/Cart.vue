@@ -54,7 +54,8 @@
                 <p
                   class="text-purple-600 font-medium text-sm sm:text-base mt-1"
                 >
-                  المبلغ: {{ (item.amount * item.qty).toLocaleString() }} ريال
+                  المبلغ: {{ (item.amount * item.qty).toLocaleString() }}
+                  <span class="icon-saudi_riyal text-lg"></span>
                 </p>
                 <div class="flex items-center gap-2 mt-2">
                   <Button
@@ -123,7 +124,8 @@
                 الهاتف: {{ gift.receiver_phone }}
               </p>
               <p class="text-purple-600 font-medium text-sm sm:text-base mt-1">
-                المبلغ: {{ gift.amount.toLocaleString() }} ريال
+                المبلغ: {{ gift.amount.toLocaleString() }}
+                <span class="icon-saudi_riyal text-lg"></span>
               </p>
             </div>
             <Button
@@ -163,8 +165,9 @@
             >المجموع الكلي:</span
           >
           <span class="text-xl sm:text-2xl font-bold text-purple-700"
-            >{{ totalAmount.toLocaleString() }} ريال</span
-          >
+            >{{ totalAmount.toLocaleString() }}
+            <span class="icon-saudi_riyal text-lg"></span>
+          </span>
         </div>
         <Button
           label="الذهاب للدفع"
