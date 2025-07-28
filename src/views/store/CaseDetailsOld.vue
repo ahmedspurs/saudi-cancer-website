@@ -84,7 +84,7 @@
             المبلغ المطلوب: {{ project.target_amount.toLocaleString() }} ريال
           </p>
           <p class="text-base text-gray-700 dark:text-gray-300 line-clamp-4">
-            {{ project.description || "وصف الحالة غير متوفر" }}
+            {{ project.title || "وصف الحالة غير متوفر" }}
           </p>
         </div>
 
